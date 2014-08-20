@@ -11,7 +11,12 @@ fi
 
 link() {
     rm -f "$HOME/.$1"
-    ln -s "`pwd`/$1" "$HOME/.$1"
+
+    if [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+        cmd //c mklink //h "%USERPROFILE%\\.$1" "%cd%\\$1"
+    else
+        ln -s "`pwd`/$1" "$HOME/.$1"
+    fi    
 }
 
 echo "init git ..."
@@ -30,7 +35,7 @@ fi
 
 if [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
     rm -rf ~/vimfiles
-    ls -s "`pwd`/vim" "$HOME/vimfiles"
+    cmd //c mklink //j "%USERPROFILE%\\vimfiles" "%cd%\\vim"
 else
     link vim
 fi
