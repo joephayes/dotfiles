@@ -7,6 +7,8 @@ cd $(dirname "$0")
 if [ ! -f ./vimrc ]; then
     git clone https://github.com/joephayes/dotfiles.git ~/dotfiles
     cd ~/dotfiles
+else
+    git pull origin master
 fi
 
 link() {
