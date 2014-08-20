@@ -13,7 +13,6 @@ else
   call vundle#rc()
 endif
 
-Plugin 'gmarik/vundle'
 Plugin 'Raimondi/delimitMate'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-rails'
