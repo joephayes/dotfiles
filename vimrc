@@ -50,7 +50,9 @@ if has("gui_running")
     set lines=40                " 40 lines of text instead of 24,
 else
     set background=dark
-    set term=builtin_ansi       " Make arrow and other keys work
+    if !has('win32') && !has('win64')
+        set term=builtin_ansi       " Make arrow and other keys work\
+    endif
 endif
 
 " delimitMate
