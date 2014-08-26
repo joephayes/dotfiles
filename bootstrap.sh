@@ -23,8 +23,10 @@ link() {
 
 echo "init git ..."
 link gitconfig
-link gitattributes
 link gitignore
+if [ ! -f ~/.gitconfig.local ]; then
+    touch ~/.gitconfig.local
+fi
 
 echo "init bash ..."
 link bashrc
