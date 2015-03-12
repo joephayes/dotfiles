@@ -16,7 +16,14 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-export TERM="xterm-256color"
+#
+# check for unknown TERM
+#
+if [ -z "$TERM" -o ! -r /usr/share/terminfo/*/$TERM -a \
+                   ! -r /usr/share/lib/terminfo/*/$TERM -a \
+                   ! -r /usr/lib/terminfo/*/$TERM ] 2>/dev/null; then
+    export TERM=“xterm-256color”
+fi
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
