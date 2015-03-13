@@ -1,4 +1,6 @@
-#http://lapwinglabs.com/blog/hacker-guide-to-setting-up-your-mac
+#!/bin/sh
+
+# From http://lapwinglabs.com/blog/hacker-guide-to-setting-up-your-mac
 
 
 # Check for Homebrew,
@@ -33,6 +35,7 @@ binaries=(
     ack
     hub
     git
+    vim
 )
 
 echo "installing binaries..."
@@ -68,6 +71,7 @@ apps=(
     nvalt
     quicklook-json
     skype
+    sourcetree
 )
 
 # Install apps to /Applications
