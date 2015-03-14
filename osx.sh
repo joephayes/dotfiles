@@ -72,6 +72,8 @@ apps=(
     quicklook-json
     skype
     sourcetree
+    mono-mdk
+    xamarin-studio
 )
 
 # Install apps to /Applications
