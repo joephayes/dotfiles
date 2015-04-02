@@ -54,7 +54,7 @@ apps=(
     qlcolorcode
     screenflick
     slack
-    transmit
+    filezilla
     appcleaner
     firefox
     hazel
