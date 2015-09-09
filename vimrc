@@ -5,12 +5,12 @@ set nocompatible
 filetype off
 
 if has('win32') || has('win64')
-  set rtp+=~/vimfiles/bundle/vundle/
-  call vundle#rc('$HOME/vimfiles/bundle/')
+  set rtp+=~/vimfiles/bundle/vundle.vim/
+  call vundle#begin('$HOME/vimfiles/bundle/')
 else
   " Usual quickstart instructions
-  set rtp+=~/.vim/bundle/vundle/
-  call vundle#rc()
+  set rtp+=~/.vim/bundle/vundle.vim/
+  call vundle#begin()
 endif
 
 Plugin 'Raimondi/delimitMate'
@@ -31,14 +31,15 @@ Plugin 'vim-scripts/supertab'
 Plugin 'PProvost/vim-ps1'
 Plugin 'fatih/vim-go.git'
 
+call vundle#end()
+
 let g:go_disable_autoinstall = 1
 
 " This does what it says on the tin. It will check your file on open too, not just on save.
 " You might not want this, so just leave it out if you don't.
 let g:syntastic_check_on_open=1
 
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 syntax on
 color solarized
 
