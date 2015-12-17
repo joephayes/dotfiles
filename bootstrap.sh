@@ -38,7 +38,7 @@ link bashrc
 source ~/.bash_profile
 
 echo "init vim ..."
-if [ ! -d vim/bundle/vundle ]; then
+if [ ! -d vim/bundle/vundle.vim ]; then
     git clone https://github.com/VundleVim/Vundle.vim.git vim/bundle/vundle.vim
 fi
 
