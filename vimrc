@@ -13,31 +13,73 @@ else
   call vundle#begin()
 endif
 
+Plugin 'bling/vim-airline'
 Plugin 'Raimondi/delimitMate'
+Plugin 'othree/html5.vim'
+Plugin 'elzr/vim-json'
+Plugin 'burnettk/vim-angular'
+Plugin 'pangloss/vim-javascript'
+Plugin 'othree/javascript-libraries-syntax.vim'
+Plugin 'claco/jasmine.vim'
 Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-rails'
 Plugin 'moll/vim-node'
+Plugin 'hail2u/vim-css3-syntax'
+Plugin 'groenewege/vim-less'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/syntastic'
-Plugin 'jelera/vim-javascript-syntax'
-Plugin 'pangloss/vim-javascript'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'marijnh/tern_for_vim'
 Plugin 'docunext/closetag.vim'
 Plugin 'vim-scripts/supertab'
 Plugin 'PProvost/vim-ps1'
-Plugin 'fatih/vim-go.git'
+Plugin 'kien/ctrlp.vim'
 
 call vundle#end()
 
-let g:go_disable_autoinstall = 1
+" Set up CTRL P {{{
+" First set up patterns to ignore
+set wildignore+=*/tmp/*,*.so,*/node_modules,*.swp,*.zip     " MacOSX/Linux
+let g:ctrlp_map = '<c-p>'
+" Open CTRL+P to search MRU (most recently used), files and buffers
+let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_working_path_mode = ''
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+" Make CTRL+P only look for filenames by default
+let g:ctrlp_by_filename = '1'
 
+"""""""""  CTRL+P Mappings """""""""
+" Make CTRL+B open buffers
+nnoremap <C-b> :CtrlPBuffer<CR>
+" Make CTRL+F open Most Recently Used files
+nnoremap <C-f> :CtrlPMRU<CR>
+" }}}
+"
+" Airline {{{
+" Make sure powerline fonts are used
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.space = "\ua0"
+let g:airline_theme="badwolf"
+let g:airline#extensions#tabline#enabled = 1 "enable the tabline
+let g:airline#extensions#tabline#fnamemod = ':t' " show just the filename of buffers in the tab line
+let g:airline_detect_modified=1
+let g:airline#extensions#bufferline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+set laststatus=2
+" }}}
+"
 " This does what it says on the tin. It will check your file on open too, not just on save.
 " You might not want this, so just leave it out if you don't.
 let g:syntastic_check_on_open=1
+
+" angular.vim
+let g:angular_skip_alternate_mappings=1
+let g:angular_find_ignore=['dist/', 'data/']
 
 filetype plugin indent on
 syntax on
@@ -46,7 +88,8 @@ color solarized
 if has("gui_running")
     set guioptions-=m
     set guioptions-=T
-    set guifont=Consolas:h11:cDEFAULT
+    "set guifont=Consolas:h11:cDEFAULT
+    set guifont=Source\ Code\ Pro\ for\ Powerline:h14
     set background=light
     set lines=40                " 40 lines of text instead of 24,
 else
@@ -81,11 +124,16 @@ set nofoldenable
 " Enable the tab complete menu.
 set wildmenu
 
+"set lazyredraw
+
+set showmatch
+set showcmd
+
 " Increase the command line history length.
 set history=1000
 
-" Set the local leader.
-let maplocalleader = "|"
+" change <leader> to a comma
+let mapleader=","
 
 " Clears the search. (c)
 nnoremap <silent> <leader>c/ :nohlsearch<CR>
@@ -153,18 +201,6 @@ augroup END
 " Don't reset cursor to start of line when moving around.
 set nostartofline
 
-" from https://github.com/spf13/spf13-vim/blob/master/.vimrc
-if has('statusline')
-    set laststatus=2
-    " Broken down into easily includeable segments
-    set statusline=%<%f\    " Filename
-    set statusline+=%w%h%m%r " Options
-    set statusline+=%{fugitive#statusline()} "  Git Hotness
-    set statusline+=\ [%{&ff}/%Y]            " filetype
-    set statusline+=\ [%{getcwd()}]          " current dir
-    set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
-endif
-
 " Don't show the intro message when starting vim.
 set shortmess=atI
 
@@ -192,4 +228,3 @@ set softtabstop=4
 set shiftwidth=4
 set expandtab
 let g:html_indent_inctags='html,body,head,tbody'
-
