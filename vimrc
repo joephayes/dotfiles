@@ -31,10 +31,9 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/syntastic'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'marijnh/tern_for_vim'
+Plugin 'ternjs/tern_for_vim'
 Plugin 'docunext/closetag.vim'
 Plugin 'vim-scripts/supertab'
-Plugin 'PProvost/vim-ps1'
 Plugin 'kien/ctrlp.vim'
 
 call vundle#end()
@@ -83,7 +82,6 @@ let g:angular_find_ignore=['dist/', 'data/']
 
 filetype plugin indent on
 syntax on
-color solarized
 
 if has("gui_running")
     set guioptions-=m
@@ -94,10 +92,12 @@ if has("gui_running")
     set lines=40                " 40 lines of text instead of 24,
 else
     set background=dark
-    if !has('win32') && !has('win64')
+    if !has('win32') && !has('win64') && !has('nvim')
         set term=builtin_ansi       " Make arrow and other keys work\
     endif
 endif
+
+color solarized
 
 " delimitMate
 imap <C-c> <CR><Esc>O

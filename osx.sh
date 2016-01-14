@@ -36,6 +36,7 @@ binaries=(
     hub
     git
     vim
+    neovim/neovim/neovim
 )
 
 echo "installing binaries..."
@@ -57,7 +58,6 @@ apps=(
     filezilla
     appcleaner
     firefox
-    hazel
     qlmarkdown
     seil
     vagrant
@@ -72,12 +72,13 @@ apps=(
     quicklook-json
     skype
     sourcetree
-    mono-mdk
-    xamarin-studio
+    chefdk
 )
 
 # Install apps to /Applications
 # Default is: /Users/$user/Applications
 echo "installing apps..."
 brew cask install --appdir="/Applications" ${apps[@]}
+
+sudo pip2 install neovim
 
