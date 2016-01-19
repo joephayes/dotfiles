@@ -228,3 +228,33 @@ set softtabstop=4
 set shiftwidth=4
 set expandtab
 let g:html_indent_inctags='html,body,head,tbody'
+
+"***Language specified***
+" shell (tab width 2 chr)
+autocmd FileType sh set sw=2
+autocmd FileType sh set ts=2
+autocmd FileType sh set sts=2
+" ruby (tab width 2 chr)
+autocmd FileType ruby set sw=2
+autocmd FileType ruby set ts=2
+autocmd FileType ruby set sts=2
+" HTML (tab width 2 chr, no wrapping)
+autocmd FileType html set sw=2
+autocmd FileType html set ts=2
+autocmd FileType html set sts=2
+autocmd FileType html set textwidth=0
+" Python (tab width 4 chr)
+autocmd FileType python set sw=4
+autocmd FileType python set ts=4
+autocmd FileType python set sts=4
+" CSS (tab width 2 chr)
+autocmd FileType css set sw=2
+autocmd FileType css set ts=2
+autocmd FileType css set sts=2
+" JavaScript (tab width 4 chr)
+autocmd FileType javascript set sw=4
+autocmd FileType javascript set ts=4
+autocmd FileType javascript set sts=4
+" CoffeeScript
+au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab

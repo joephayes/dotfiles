@@ -65,7 +65,6 @@ apps=(
     iterm2
     qlprettypatch
     virtualbox
-    mailbox
     qlstephen
     vlc
     nvalt
