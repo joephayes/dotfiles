@@ -6,8 +6,8 @@
 # Check for Homebrew,
 # Install if we don't have it
 if test ! $(which brew); then
-    echo "Installing homebrew..."
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  echo "Installing homebrew..."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 # Update homebrew recipes
@@ -27,16 +27,16 @@ brew tap homebrew/dupes
 brew install homebrew/dupes/grep
 
 binaries=(
-    graphicsmagick
-    python
-    trash
-    node
-    tree
-    ack
-    hub
-    git
-    vim
-    neovim/neovim/neovim
+  graphicsmagick
+  python
+  trash
+  node
+  tree
+  ack
+  hub
+  git
+  vim
+  neovim/neovim/neovim
 )
 
 echo "installing binaries..."
@@ -48,30 +48,30 @@ brew install caskroom/cask/brew-cask
 
 # Apps
 apps=(
-    osxfuse
-    alfred
-    dropbox
-    google-chrome
-    qlcolorcode
-    screenflick
-    slack
-    filezilla
-    appcleaner
-    firefox
-    qlmarkdown
-    seil
-    vagrant
-    flash
-    iterm2
-    qlprettypatch
-    virtualbox
-    qlstephen
-    vlc
-    nvalt
-    quicklook-json
-    skype
-    sourcetree
-    chefdk
+  keepassx
+  osxfuse
+  dropbox
+  google-chrome
+  qlcolorcode
+  screenflick
+  slack
+  filezilla
+  appcleaner
+  firefox
+  qlmarkdown
+  seil
+  vagrant
+  flash
+  iterm2
+  qlprettypatch
+  virtualbox
+  qlstephen
+  vlc
+  nvalt
+  quicklook-json
+  skype
+  sourcetree
+  chefdk
 )
 
 # Install apps to /Applications
