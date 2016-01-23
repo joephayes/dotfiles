@@ -38,8 +38,8 @@ link bashrc
 source ~/.bash_profile
 
 echo "init vim ..."
-if [ ! -d vim/bundle/vundle.vim ]; then
-    git clone https://github.com/VundleVim/Vundle.vim.git vim/bundle/vundle.vim
+if [ ! -d vim/bundle/Vundle.vim ]; then
+    git clone https://github.com/VundleVim/Vundle.vim.git vim/bundle/Vundle.vim
 fi
 
 if [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then

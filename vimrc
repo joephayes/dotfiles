@@ -13,6 +13,7 @@ else
   call vundle#begin()
 endif
 
+Plugin 'VundleVim/Vundle.vim'
 Plugin 'bling/vim-airline'
 Plugin 'Raimondi/delimitMate'
 Plugin 'othree/html5.vim'
@@ -34,7 +35,8 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'ternjs/tern_for_vim'
 Plugin 'docunext/closetag.vim'
 Plugin 'vim-scripts/supertab'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'kchmck/vim-coffee-script'
 
 call vundle#end()
 
@@ -156,7 +158,7 @@ set title
 set number
 
 " Show invisible characters.
-set listchars=tab:?\ ,trail:·
+set listchars=tab:?\ ,trail:Â·
 set list
  
 " Highlight searches.
@@ -251,10 +253,10 @@ autocmd FileType python set sts=4
 autocmd FileType css set sw=2
 autocmd FileType css set ts=2
 autocmd FileType css set sts=2
-" JavaScript (tab width 4 chr)
-autocmd FileType javascript set sw=4
-autocmd FileType javascript set ts=4
-autocmd FileType javascript set sts=4
+" JavaScript (tab width 2 chr)
+autocmd FileType javascript set sw=2
+autocmd FileType javascript set ts=2
+autocmd FileType javascript set sts=2
 " CoffeeScript
 au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
