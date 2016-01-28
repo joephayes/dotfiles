@@ -1,6 +1,14 @@
 scriptencoding utf-8
 set encoding=utf-8
 
+if has('unix')
+    let s:uname = system('uname')
+    let g:python_host_prog='/usr/bin/python'
+    if s:uname == "Darwin\n"
+        let g:python_host_prog='/usr/local/bin/python'
+    endif
+endif
+
 set nocompatible
 filetype off
 
@@ -22,6 +30,7 @@ Plugin 'burnettk/vim-angular'
 Plugin 'pangloss/vim-javascript'
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'claco/jasmine.vim'
+Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-fugitive'
 Plugin 'moll/vim-node'
 Plugin 'hail2u/vim-css3-syntax'
@@ -37,8 +46,35 @@ Plugin 'docunext/closetag.vim'
 Plugin 'vim-scripts/supertab'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'kchmck/vim-coffee-script'
+Plugin 'euclio/vim-markdown-composer'
+Plugin 'guns/vim-clojure-static'
+Plugin 'tpope/vim-fireplace'
+Plugin 'tpope/vim-surround'
+Plugin 'vim-scripts/paredit.vim'
+Plugin 'kien/rainbow_parentheses.vim'
 
 call vundle#end()
+
+"  Parentheses colours using Solarized
+let g:rbpt_colorpairs = [
+    \ [ '13', '#6c71c4'],
+    \ [ '5',  '#d33682'],
+    \ [ '1',  '#dc322f'],
+    \ [ '9',  '#cb4b16'],
+    \ [ '3',  '#b58900'],
+    \ [ '2',  '#859900'],
+    \ [ '6',  '#2aa198'],
+    \ [ '4',  '#268bd2'],
+    \ ]
+
+" Enable rainbow parentheses for all buffers
+augroup rainbow_parentheses
+    au!
+    au VimEnter * RainbowParenthesesActivate
+    au BufEnter * RainbowParenthesesLoadRound
+    au BufEnter * RainbowParenthesesLoadSquare
+    au BufEnter * RainbowParenthesesLoadBraces
+augroup END
 
 " Set up CTRL P {{{
 " First set up patterns to ignore
