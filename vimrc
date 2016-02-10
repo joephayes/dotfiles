@@ -13,11 +13,11 @@ set nocompatible
 filetype off
 
 if has('win32') || has('win64')
-  set rtp+=~/vimfiles/bundle/vundle.vim/
+  set rtp+=~/vimfiles/bundle/Vundle.vim/
   call vundle#begin('$HOME/vimfiles/bundle/')
 else
   " Usual quickstart instructions
-  set rtp+=~/.vim/bundle/vundle.vim/
+  set rtp+=~/.vim/bundle/Vundle.vim/
   call vundle#begin()
 endif
 
