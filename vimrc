@@ -13,11 +13,11 @@ set nocompatible
 filetype off
 
 if has('win32') || has('win64')
-  set rtp+=~/vimfiles/bundle/Vundle.vim/
+  set rtp+=~/vimfiles/bundle/vundle.vim/
   call vundle#begin('$HOME/vimfiles/bundle/')
 else
   " Usual quickstart instructions
-  set rtp+=~/.vim/bundle/Vundle.vim/
+  set rtp+=~/.vim/bundle/vundle.vim/
   call vundle#begin()
 endif
 
@@ -31,7 +31,7 @@ Plugin 'burnettk/vim-angular'
 Plugin 'pangloss/vim-javascript'
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'claco/jasmine.vim'
-Plugin 'vim-ruby/vim-ruby'
+Plugin 'vim-ruby/vim-ruby', 
 Plugin 'tpope/vim-fugitive'
 Plugin 'moll/vim-node'
 Plugin 'hail2u/vim-css3-syntax'
@@ -49,9 +49,12 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'euclio/vim-markdown-composer'
 Plugin 'guns/vim-clojure-static'
-Plugin 'tpope/vim-fireplace'
+Plugin 'tpope/vim-classpath'
+Plugin 'tpope/vim-dispatch'
+Plugin 'tpope/vim-fireplace', { 'for': ['clj','cljs','cljx','clojure'] }
 Plugin 'tpope/vim-surround'
-Plugin 'vim-scripts/paredit.vim'
+Plugin 'tpope/vim-salve'
+Plugin 'tpope/vim-sexp-mappings-for-regular-people'
 Plugin 'kien/rainbow_parentheses.vim'
 
 call vundle#end()
@@ -67,6 +70,8 @@ let g:rbpt_colorpairs = [
     \ [ '6',  '#2aa198'],
     \ [ '4',  '#268bd2'],
     \ ]
+
+let g:solarized_visibility="normal"
 
 " Enable rainbow parentheses for all buffers
 augroup rainbow_parentheses
@@ -135,7 +140,6 @@ else
         set term=builtin_ansi       " Make arrow and other keys work\
     endif
 endif
-
 color solarized
 
 " delimitMate
@@ -195,7 +199,7 @@ set title
 set number
 
 " Show invisible characters.
-set listchars=tab:?\ ,trail:·
+set listchars=tab:?\ ,trail:�
 set list
  
 " Highlight searches.
@@ -268,7 +272,6 @@ set shiftwidth=4
 set expandtab
 let g:html_indent_inctags='html,body,head,tbody'
 
-"***Language specified***
 " shell (tab width 2 chr)
 autocmd FileType sh set sw=2
 autocmd FileType sh set ts=2
