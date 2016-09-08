@@ -3,7 +3,7 @@
 [apply]
 	whitespace = fix
 [core]
-	excludesfile = ~/.gitignore
+        excludesfile = ~/.gitignore
 	attributesfile = ~/.gitattributes
 	whitespace = fix,space-before-tab,tab-in-indent,trailing-space
 	autocrlf = false
@@ -27,3 +27,5 @@
         tool = vimdiff3
 [mergetool]
         path = nvim
+[grep]
+	lineNumber = true
