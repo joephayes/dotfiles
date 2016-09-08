@@ -4,8 +4,10 @@ set encoding=utf-8
 if has('unix')
     let s:uname = system('uname')
     let g:python_host_prog='/usr/bin/python'
+    let g:python3_host_prog='/usr/bin/python3'
     if s:uname == "Darwin\n"
         let g:python_host_prog='/usr/local/bin/python'
+        let g:python3_host_prog='/usr/local/bin/python3'
     endif
 endif
 
@@ -31,7 +33,7 @@ Plugin 'burnettk/vim-angular'
 Plugin 'pangloss/vim-javascript'
 Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'claco/jasmine.vim'
-Plugin 'vim-ruby/vim-ruby', 
+Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-fugitive'
 Plugin 'moll/vim-node'
 Plugin 'hail2u/vim-css3-syntax'
@@ -56,6 +58,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-salve'
 Plugin 'tpope/vim-sexp-mappings-for-regular-people'
 Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'mxw/vim-jsx'
 
 call vundle#end()
 
@@ -75,7 +78,6 @@ let g:solarized_visibility="normal"
 
 " Enable rainbow parentheses for all buffers
 augroup rainbow_parentheses
-    au!
     au VimEnter * RainbowParenthesesActivate
     au BufEnter * RainbowParenthesesLoadRound
     au BufEnter * RainbowParenthesesLoadSquare
@@ -120,9 +122,14 @@ set laststatus=2
 " You might not want this, so just leave it out if you don't.
 let g:syntastic_check_on_open=1
 
+let g:syntastic_javascript_checkers = ['eslint']
+
 " angular.vim
 let g:angular_skip_alternate_mappings=1
 let g:angular_find_ignore=['dist/', 'data/']
+
+" vim-jsx
+let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 
 filetype plugin indent on
 syntax on
@@ -272,6 +279,14 @@ set shiftwidth=4
 set expandtab
 let g:html_indent_inctags='html,body,head,tbody'
 
+augroup vimrc_autocmds
+  autocmd BufEnter * highlight OverLength ctermbg=cyan ctermfg=white guibg=#FFD9D9
+  autocmd BufEnter * match OverLength /\%81v.*/
+  autocmd BufEnter * set tw=0
+  autocmd BufEnter * set fo=cq
+  autocmd BufEnter * set wm=0
+augroup END
+
 " shell (tab width 2 chr)
 autocmd FileType sh set sw=2
 autocmd FileType sh set ts=2
@@ -297,6 +312,13 @@ autocmd FileType css set sts=2
 autocmd FileType javascript set sw=2
 autocmd FileType javascript set ts=2
 autocmd FileType javascript set sts=2
+" JavaScript JSX (tab width 2 chr)
+autocmd FileType javascript.jsx set sw=2
+autocmd FileType javascript.jsx set ts=2
+autocmd FileType javascript.jsx set sts=2
 " CoffeeScript
 au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
+" Markdown
+autocmd FileType markdown set tw=80
+
