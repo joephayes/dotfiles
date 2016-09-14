@@ -60,6 +60,7 @@ export OPENSSL_LIB_DIR=$(brew --prefix openssl)"/lib"
 export OPENSSL_INCLUDE_DIR=$(brew --prefix openssl)"/include"
 cargo build --release
 cd $(dirname "$0")
+nvim +UpdateRemotePlugins +qall
 
 source ~/.bash_profile
 
