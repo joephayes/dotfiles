@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# From http://lapwinglabs.com/blog/hacker-guide-to-setting-up-your-mac
+set -e
 
+# From http://lapwinglabs.com/blog/hacker-guide-to-setting-up-your-mac
 
 # Check for Homebrew,
 # Install if we don't have it
@@ -27,8 +28,11 @@ brew tap homebrew/dupes
 brew install homebrew/dupes/grep
 
 binaries=(
+  openssl
+  rust
   graphicsmagick
   python
+  python3
   trash
   node
   tree
@@ -79,5 +83,6 @@ apps=(
 echo "installing apps..."
 brew cask install --appdir="/Applications" ${apps[@]}
 
-sudo pip2 install neovim
+sudo pip install neovim
+sudo pip3 install neovim
 

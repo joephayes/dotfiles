@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
+set -e
+
 # bootstrap installs things.
 
 cd $(dirname "$0")
 
 if [ "$(uname)" == "Darwin" ]; then
-    source ./osx.sh	
+    source ./osx.sh
 fi
 
 if [ ! -f ./vimrc ]; then
@@ -22,7 +24,7 @@ link() {
         cmd //c mklink "%USERPROFILE%\\.$1" "%cd%\\$1"
     else
         ln -s "`pwd`/$1" "$HOME/.$1"
-    fi    
+    fi
 }
 
 echo "init git ..."
@@ -35,6 +37,7 @@ fi
 echo "init bash ..."
 link bash_profile
 link bashrc
+curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
 source ~/.bash_profile
 
 echo "init vim ..."
@@ -51,5 +54,12 @@ fi
 link vimrc
 vim +BundleInstall! +qall
 
-. ~/.bash_profile
+cd vim/bundle/vim-markdown-composer
+export OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+export OPENSSL_LIB_DIR=$(brew --prefix openssl)"/lib"
+export OPENSSL_INCLUDE_DIR=$(brew --prefix openssl)"/include"
+cargo build --release
+cd $(dirname "$0")
+
+source ~/.bash_profile
 
