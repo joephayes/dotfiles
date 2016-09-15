@@ -6,7 +6,7 @@ set -e
 
 # Check for Homebrew,
 # Install if we don't have it
-if test ! $(which brew); then
+if ! type brew >/dev/null; then
   echo "Installing homebrew..."
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
@@ -85,4 +85,3 @@ brew cask install --appdir="/Applications" ${apps[@]}
 
 sudo pip install neovim
 sudo pip3 install neovim
-
