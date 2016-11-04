@@ -35,28 +35,31 @@ Plugin 'othree/javascript-libraries-syntax.vim'
 Plugin 'claco/jasmine.vim'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
 Plugin 'moll/vim-node'
 Plugin 'hail2u/vim-css3-syntax'
 Plugin 'groenewege/vim-less'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/syntastic'
+Plugin 'vim-syntastic/syntastic'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'ternjs/tern_for_vim'
 Plugin 'docunext/closetag.vim'
 Plugin 'vim-scripts/supertab'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'kchmck/vim-coffee-script'
-Plugin 'euclio/vim-markdown-composer'
 Plugin 'guns/vim-clojure-static'
+Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-classpath'
+Plugin 'tpope/vim-projectionist'
 Plugin 'tpope/vim-dispatch'
 Plugin 'tpope/vim-fireplace', { 'for': ['clj','cljs','cljx','clojure'] }
+Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-salve'
-Plugin 'tpope/vim-sexp-mappings-for-regular-people'
+Plugin 'tpope/vim-salve', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+Plugin 'guns/vim-sexp', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+Plugin 'tpope/vim-sexp-mappings-for-regular-people', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'mxw/vim-jsx'
 
@@ -78,6 +81,7 @@ let g:solarized_visibility="normal"
 
 " Enable rainbow parentheses for all buffers
 augroup rainbow_parentheses
+    au!
     au VimEnter * RainbowParenthesesActivate
     au BufEnter * RainbowParenthesesLoadRound
     au BufEnter * RainbowParenthesesLoadSquare
@@ -201,14 +205,14 @@ nnoremap <leader>w :%s/\s\+$//e<CR>
 nnoremap <leader>f :tab sp<CR>
 " Show the file name in the window title bar.
 set title
- 
+
 " Enable line numbers.
 set number
 
 " Show invisible characters.
 set listchars=tab:?\ ,trail:�
 set list
- 
+
 " Highlight searches.
 set hlsearch
 
@@ -279,13 +283,18 @@ set shiftwidth=4
 set expandtab
 let g:html_indent_inctags='html,body,head,tbody'
 
+if exists('+colorcolumn')
+  set colorcolumn=80
+else
+  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+endif
+
 augroup vimrc_autocmds
-  autocmd BufEnter * highlight OverLength ctermbg=cyan ctermfg=white guibg=#FFD9D9
-  autocmd BufEnter * match OverLength /\%81v.*/
   autocmd BufEnter * set tw=0
   autocmd BufEnter * set fo=cq
   autocmd BufEnter * set wm=0
 augroup END
+
 
 " shell (tab width 2 chr)
 autocmd FileType sh set sw=2
@@ -319,6 +328,9 @@ autocmd FileType javascript.jsx set sts=2
 " CoffeeScript
 au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
-" Markdown
-autocmd FileType markdown set tw=80
+" Markdown (tab width 2 chr, wrapping at 80)
+autocmd FileType markdown set sw=2
+autocmd FileType markdown set ts=2
+autocmd FileType markdown set sts=2
+autocmd FileType markdown set textwidth=80
 

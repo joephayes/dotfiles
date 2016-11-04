@@ -70,16 +70,6 @@ fi
 link vimrc
 vim +BundleInstall! +qall
 
-if [ -d vim/bundle/vim-markdown-composer ]; then
-  cd vim/bundle/vim-markdown-composer
-  if ! type cargo >/dev/null; then
-    export OPENSSL_ROOT_DIR=$(brew --prefix openssl)
-    export OPENSSL_LIB_DIR=$(brew --prefix openssl)"/lib"
-    export OPENSSL_INCLUDE_DIR=$(brew --prefix openssl)"/include"
-    cargo build --release
-    nvim +UpdateRemotePlugins +qall
-  fi
-  cd $(dirname "$0")
-fi
+link tmux.conf
 
 source ~/.bash_profile

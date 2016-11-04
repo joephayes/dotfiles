@@ -29,7 +29,6 @@ brew install homebrew/dupes/grep
 
 binaries=(
   openssl
-  rust
   graphicsmagick
   python
   python3
@@ -40,6 +39,7 @@ binaries=(
   hub
   git
   vim
+  tmux
   neovim/neovim/neovim
 )
 
@@ -81,7 +81,7 @@ apps=(
 # Install apps to /Applications
 # Default is: /Users/$user/Applications
 echo "installing apps..."
-brew cask install --appdir="/Applications" ${apps[@]}
+brew cask uninstall --force ${app[0]} && brew cask install --appdir="/Applications" ${apps[@]}
 
 sudo pip install neovim
 sudo pip3 install neovim
