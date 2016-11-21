@@ -62,7 +62,7 @@ Plugin 'guns/vim-sexp', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
 Plugin 'tpope/vim-sexp-mappings-for-regular-people', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'mxw/vim-jsx'
-Plugin 'derkwyatt/vim-scala'
+Plugin 'derekwyatt/vim-scala'
 Plugin 'tbastos/vim-lua'
 
 call vundle#end()
