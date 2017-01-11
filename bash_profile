@@ -2,8 +2,8 @@ if [ "$(uname)" == "Darwin" ]; then
     PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
     export PATH
 fi
+[[ -r ~/.bashrc ]] && . ~/.bashrc
 
-if [ -f ~/.bashrc ]; then
-    source ~/.bashrc
-fi
 
+
+export CDPATH=".:~/vagrant"

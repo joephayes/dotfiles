@@ -41,7 +41,13 @@ binaries=(
   vim
   tmux
   neovim/neovim/neovim
-)
+  lua
+  scala
+  sbt
+  leiningen
+  bash-completion
+  bash-git-prompt
+  )
 
 echo "installing binaries..."
 brew install ${binaries[@]}
@@ -52,6 +58,8 @@ brew install caskroom/cask/brew-cask
 
 # Apps
 apps=(
+  java
+  eclipse-jee
   keepassx
   osxfuse
   dropbox
