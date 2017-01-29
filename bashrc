@@ -72,6 +72,3 @@ fi
 if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
 fi
-
-[ -d $HOME/bin ] && export PATH="$HOME/bin:$PATH"
-

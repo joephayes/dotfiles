@@ -64,8 +64,12 @@ Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'mxw/vim-jsx'
 Plugin 'derekwyatt/vim-scala'
 Plugin 'tbastos/vim-lua'
+Plugin 'jpalardy/vim-slime'
+Plugin 'lifepillar/pgsql.vim'
 
 call vundle#end()
+
+let g:slime_target = "tmux"
 
 "  Parentheses colours using Solarized
 let g:rbpt_colorpairs = [
