@@ -1,8 +1,13 @@
 #!/bin/sh
 
+###
+# SOME COMMANDS WILL NOT WORK ON macOS (Sierra or newer)
+# For Sierra or newer, see https://github.com/mathiasbynens/dotfiles/blob/master/.macos
+###
+
 # Alot of these configs have been taken from the various places
 # on the web, most from here
-# https://github.com/mathiasbynens/dotfiles/blob/master/.osx
+# https://github.com/mathiasbynens/dotfiles/blob/5b3c8418ed42d93af2e647dc9d122f25cc034871/.osx
 
 # Set the colours you can use
 black='\033[0;30m'
@@ -200,6 +205,10 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   sudo defaults write /Library/Preferences/.GlobalPreferences.plist _HIEnableThemeSwitchHotKey -bool true
 fi
 
+echo ""
+echo "Disable Photos.app from starting everytime a device is plugged in"
+defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
+
 
 ###############################################################################
 # General Power and Performance modifications
@@ -358,6 +367,7 @@ sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutio
 
 echo ""
 echo "Show icons for hard drives, servers, and removable media on the desktop? (y/n)"
+read -r response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 fi
@@ -496,6 +506,17 @@ defaults write com.apple.dock expose-animation-duration -float 0.1
 defaults write com.apple.dock "expose-group-by-app" -bool true
 
 echo ""
+echo "Disable the over-the-top focus ring animation"
+defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
+
+echo ""
+echo "Hide the menu bar? (y/n)"
+read -r response
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  defaults write "Apple Global Domain" "_HIHideMenuBar" 1
+fi
+
+echo ""
 echo "Set Dock to auto-hide and remove the auto-hiding delay? (y/n)"
 read -r response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
@@ -510,7 +531,7 @@ fi
 ###############################################################################
 
 echo ""
-echo "Privacy: Don’t send search queries to Apple"
+echo "Privacy: Don't send search queries to Apple"
 defaults write com.apple.Safari UniversalSearchEnabled -bool false
 defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 
@@ -633,27 +654,47 @@ echo ""
 echo "Do you use Transmission for torrenting? (y/n)"
 read -r response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  mkdir -p ~/Downloads/Incomplete
+
   echo ""
   echo "Setting up an incomplete downloads folder in Downloads"
-  mkdir -p ~/Downloads/Incomplete
   defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
   defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Incomplete"
+
+  echo ""
+  echo "Setting auto-add folder to be Downloads"
+  defaults write org.m0k.transmission AutoImportDirectory -string "${HOME}/Downloads"
 
   echo ""
   echo "Don't prompt for confirmation before downloading"
   defaults write org.m0k.transmission DownloadAsk -bool false
 
   echo ""
-  echo "Trash original torrent files"
+  echo "Trash original torrent files after adding them"
   defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
 
   echo ""
-  echo "Hide the donate message"
+  echo "Hiding the donate message"
   defaults write org.m0k.transmission WarningDonate -bool false
 
   echo ""
-  echo "Hide the legal disclaimer"
+  echo "Hiding the legal disclaimer"
   defaults write org.m0k.transmission WarningLegal -bool false
+
+  echo ""
+  echo "Auto-resizing the window to fit transfers"
+  defaults write org.m0k.transmission AutoSize -bool true
+
+  echo ""
+  echo "Auto updating to betas"
+  defaults write org.m0k.transmission AutoUpdateBeta -bool true
+
+  echo ""
+  echo "Setting up the best block list"
+  defaults write org.m0k.transmission EncryptionRequire -bool true
+  defaults write org.m0k.transmission BlocklistAutoUpdate -bool true
+  defaults write org.m0k.transmission BlocklistNew -bool true
+  defaults write org.m0k.transmission BlocklistURL -string "http://john.bitsurge.net/public/biglist.p2p.gz"
 fi
 
 
@@ -673,6 +714,14 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   echo "Setting Git to use Sublime Text as default editor"
   git config --global core.editor "subl -n -w"
 fi
+
+###############################################################################
+# Optional Extras
+###############################################################################
+
+# Create a nice last-change git log message, from https://twitter.com/elijahmanor/status/697055097356943360
+git config --global alias.lastchange 'log -p --follow -n 1'
+
 
 
 ###############################################################################
