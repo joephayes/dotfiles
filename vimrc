@@ -340,3 +340,4 @@ autocmd FileType markdown set ts=2
 autocmd FileType markdown set sts=2
 autocmd FileType markdown set textwidth=80
 
+set clipboard=unnamed

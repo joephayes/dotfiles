@@ -47,6 +47,7 @@ binaries=(
   leiningen
   bash-completion
   bash-git-prompt
+  reattach-to-user-namespace
   )
 
 echo "installing binaries..."
