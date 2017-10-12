@@ -48,6 +48,7 @@ binaries=(
   bash-completion
   bash-git-prompt
   reattach-to-user-namespace
+  ag
   )
 
 echo "installing binaries..."
@@ -85,6 +86,7 @@ apps=(
   skype
   sourcetree
   chefdk
+  gimp
 )
 
 # Install apps to /Applications
