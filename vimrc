@@ -67,6 +67,7 @@ Plugin 'tbastos/vim-lua'
 Plugin 'jpalardy/vim-slime'
 Plugin 'lifepillar/pgsql.vim'
 Plugin 'fatih/vim-go'
+Plugin 'rking/ag.vim'
 
 call vundle#end()
 
