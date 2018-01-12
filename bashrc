@@ -72,3 +72,8 @@ fi
 if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
 fi
+
+GPG_TTY=$(tty)
+export GPG_TTY
+
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"

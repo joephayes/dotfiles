@@ -23,11 +23,10 @@ brew install findutils
 # Install Bash 4
 brew install bash
 
-# Install more recent versions of some OS X tools
-brew tap homebrew/dupes
-brew install homebrew/dupes/grep
-
 binaries=(
+  wget
+  grep
+  clojure
   openssl
   graphicsmagick
   python
@@ -40,15 +39,17 @@ binaries=(
   git
   vim
   tmux
-  neovim/neovim/neovim
-  lua
-  scala
-  sbt
+  neovim
   leiningen
   bash-completion
   bash-git-prompt
   reattach-to-user-namespace
-  ag
+  the_silver_searcher
+  go
+  gpg
+  gpg-agent
+  pinentry-mac
+  daemontools
   )
 
 echo "installing binaries..."
@@ -56,43 +57,52 @@ brew install ${binaries[@]}
 
 brew cleanup
 
-brew install caskroom/cask/brew-cask
+echo "initialize GPG"
+mkdir -p ~/.gnupg
+echo 'pinentry-program /usr/local/bin/pinentry-mac' >> ~/.gnupg/gpg-agent.conf
 
 # Apps
 apps=(
   java
   eclipse-jee
   keepassx
-  osxfuse
+  qlimagesize
   dropbox
+  google-hangouts
+  google-backup-and-sync
   google-chrome
   qlcolorcode
-  screenflick
   slack
-  filezilla
   appcleaner
   firefox
   qlmarkdown
-  seil
   vagrant
-  flash
   iterm2
   qlprettypatch
   virtualbox
   qlstephen
   vlc
   nvalt
+  quicklook-csv
   quicklook-json
   skype
+  epubquicklook
   sourcetree
-  chefdk
+  xquartz
+  visualvm
   gimp
+  font-inconsolata
 )
+
+
+# Install tap for fonts
+brew tap caskroom/fonts
 
 # Install apps to /Applications
 # Default is: /Users/$user/Applications
 echo "installing apps..."
-brew cask uninstall --force ${app[0]} && brew cask install --appdir="/Applications" ${apps[@]}
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+brew cask install ${apps[@]} || true
 
-sudo pip install neovim
-sudo pip3 install neovim
+pip install neovim --upgrade --user
+pip3 install neovim --upgrade --user
