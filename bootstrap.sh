@@ -71,5 +71,6 @@ link vimrc
 vim +BundleInstall! +qall
 
 link tmux.conf
+link psqlrc
 
 source ~/.bash_profile
