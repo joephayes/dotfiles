@@ -43,25 +43,22 @@ Plugin 'vim-scripts/supertab'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-sleuth'
-Plugin 'tpope/vim-classpath'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-rhubarb'
-Plugin 'tpope/vim-projectionist'
-Plugin 'tpope/vim-dispatch'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-fireplace', { 'for': ['clj','cljs','cljx','clojure'] }
-Plugin 'tpope/vim-salve', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
 Plugin 'guns/vim-sexp', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
 Plugin 'tpope/vim-sexp-mappings-for-regular-people', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
-Plugin 'kien/rainbow_parentheses.vim', { 'for': ['clj','cljs','cljx','clojure'] }
+Plugin 'luochen1990/rainbow'
 Plugin 'jpalardy/vim-slime'
 Plugin 'mileszs/ack.vim'
 Plugin 'tpope/vim-obsession'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'snoe/clj-refactor.nvim', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+" Plugin 'eraserhd/parinfer-rust', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
 
 call vundle#end()
 
@@ -79,28 +76,8 @@ endif
 
 let g:slime_target = "tmux"
 
-" Parentheses colors using Solarized
-let g:rbpt_colorpairs = [
-      \ [ '13', '#6c71c4'],
-      \ [ '5',  '#d33682'],
-      \ [ '1',  '#dc322f'],
-      \ [ '9',  '#cb4b16'],
-      \ [ '3',  '#b58900'],
-      \ [ '2',  '#859900'],
-      \ [ '6',  '#2aa198'],
-      \ [ '4',  '#268bd2'],
-      \ ]
-
-let g:solarized_visibility="normal"
-
-" Enable rainbow parentheses for all buffers
-augroup rainbow_parentheses
-  au!
-  au VimEnter * RainbowParenthesesActivate
-  au BufEnter * RainbowParenthesesLoadRound
-  au BufEnter * RainbowParenthesesLoadSquare
-  au BufEnter * RainbowParenthesesLoadBraces
-augroup END
+" vim-sexp
+" let g:sexp_enable_insert_mode_mappings = 0
 
 " Set up CTRL P
 " First set up patterns to ignore
@@ -130,6 +107,8 @@ let g:ctrlp_by_filename = 1
 " Don't jump to already open window. This is annoying if you are maintaining
 " several Tab workspaces and want to open two windows into the same file.
 let g:ctrlp_switch_buffer = 0
+
+let g:ctrlp_match_window = 'results:30'
 
 " ALE
 let g:ale_sign_warning = '▲'
@@ -205,8 +184,12 @@ else
   endif
 endif
 
+let g:solarized_visibility="normal"
+
 " Define color scheme
 colorscheme solarized
+
+let g:rainbow_active = 1
 
 " always show what mode we're currently editing in
 set showmode
@@ -290,6 +273,9 @@ nnoremap <leader>w :%s/\s\+$//e<CR>
 
 " Opens the split in a new tab. Kind like "distraction free" mode. (f)
 nnoremap <leader>f :tab sp<CR>
+
+" NeoVim specific - fix vim-tmux-navigator C-h
+nnoremap <silent> <BS> :TmuxNavigateLeft<cr>
 
 " Show the file name in the window title bar.
 set title
@@ -465,3 +451,4 @@ autocmd FileType markdown set textwidth=80
 set clipboard=unnamed
 
 command FormatJSON %!python -m json.tool
+command FormatXML %!xmllint --format -

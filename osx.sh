@@ -47,7 +47,6 @@ binaries=(
   the_silver_searcher
   go
   gpg
-  gpg-agent
   pinentry-mac
   daemontools
   )
@@ -92,6 +91,7 @@ apps=(
   visualvm
   gimp
   font-inconsolata
+  visual-studio-code
 )
 
 

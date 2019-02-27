@@ -53,8 +53,8 @@ fi
 echo "init bash ..."
 link bash_profile
 link bashrc
+link bash_aliases
 curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
-source ~/.bash_profile
 
 echo "init vim ..."
 if [ ! -d vim/bundle/Vundle.vim ]; then
