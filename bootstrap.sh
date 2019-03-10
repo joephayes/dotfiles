@@ -56,6 +56,14 @@ link bashrc
 link bash_aliases
 curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
 
+echo "init tmux"
+link tmux.conf
+
+if "test ! -d ~/.tmux/plugins/tpm" \
+      "run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'"
+
+      run '~/.tmux/plugins/tpm/tpm'
+
 echo "init vim ..."
 if [ ! -d vim/bundle/Vundle.vim ]; then
     git clone https://github.com/VundleVim/Vundle.vim.git vim/bundle/Vundle.vim
@@ -70,7 +78,12 @@ fi
 link vimrc
 vim +BundleInstall! +qall
 
-link tmux.conf
+echo "init postgres"
 link psqlrc
+
+echo "init nvim"
+pip2 install pynvim neovim --upgrade --user --no-cache-dir
+pip3 install pynvim neovim --upgrade --user --no-cache-dir
+nvim +UpdateRemotePlugins +qall
 
 source ~/.bash_profile

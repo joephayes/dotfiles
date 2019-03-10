@@ -58,7 +58,7 @@ Plugin 'tpope/vim-unimpaired'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'snoe/clj-refactor.nvim', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
-" Plugin 'eraserhd/parinfer-rust', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+Plugin 'eraserhd/parinfer-rust', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
 
 call vundle#end()
 
@@ -405,7 +405,7 @@ augroup vimrc_autocmds
   autocmd BufEnter * set wm=0
 augroup END
 
-" vim-polyglot's cofffee file type detection doesn't work quite right
+" vim-polyglot's coffee file type detection doesn't work quite right
 autocmd BufNewFile,BufRead *.js.coffee set filetype=coffee
 
 " shell (tab width 2 chr)
@@ -446,6 +446,8 @@ autocmd FileType markdown set sw=2
 autocmd FileType markdown set ts=2
 autocmd FileType markdown set sts=2
 autocmd FileType markdown set textwidth=80
+" CLojure specific
+au BufEnter *.clj nnoremap <buffer> cpt :Eval<CR>
 
 " Set Vim Clipboard to System
 set clipboard=unnamed

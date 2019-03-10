@@ -1,7 +1,7 @@
 [[ -s ~/.profile ]] && . ~/.profile # Load the default .profile
 
 export JAVA_HOME=$(/usr/libexec/java_home)
-export PATH="${JAVA_HOME}/bin:${PATH}"
+export PATH="${JAVA_HOME}/bin"
 export CDPATH=".:~/src"
 export GOPATH=$HOME/golang
 export GOROOT=/usr/local/opt/go/libexec
@@ -19,12 +19,12 @@ export GIT_PS1_SHOWUPSTREAM=svn
 export GIT_PROMPT_THEME=Solarized
 export EDITOR=/usr/local/bin/nvim
 export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/bin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:/usr/sbin
 export PATH=$PATH:/sbin
-export PATH="$HOME/.rbenv/bin:$PATH"
 
 # Fixes "RE error: illegal byte sequence" for sed search/replace on osx
 # http://stackoverflow.com/questions/19242275/re-error-illegal-byte-sequence-on-mac-os-x
@@ -32,6 +32,3 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 # export LANG=C
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
-
-test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
-

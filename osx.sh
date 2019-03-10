@@ -20,8 +20,15 @@ brew install coreutils
 # Install GNU `find`, `locate`, `updatedb`, and `xargs`, g-prefixed
 brew install findutils
 
-# Install Bash 4
+# Install GNU 'ftp', 'telnet', etc.
+brew install inetutils
+
+# Install Bash 5
 brew install bash
+
+# Install latest Java (required by Clojure)
+brew tap caskroom/cask
+brew cask install java 
 
 binaries=(
   wget
@@ -29,8 +36,8 @@ binaries=(
   clojure
   openssl
   graphicsmagick
+  python@2
   python
-  python3
   trash
   node
   tree
@@ -49,6 +56,7 @@ binaries=(
   gpg
   pinentry-mac
   daemontools
+  rust
   )
 
 echo "installing binaries..."
@@ -60,9 +68,11 @@ echo "initialize GPG"
 mkdir -p ~/.gnupg
 echo 'pinentry-program /usr/local/bin/pinentry-mac' >> ~/.gnupg/gpg-agent.conf
 
+# Install tap for fonts
+brew tap caskroom/fonts
+
 # Apps
 apps=(
-  java
   eclipse-jee
   keepassx
   qlimagesize
@@ -88,21 +98,14 @@ apps=(
   epubquicklook
   sourcetree
   xquartz
-  visualvm
   gimp
   font-inconsolata
   visual-studio-code
+  spotify
 )
-
-
-# Install tap for fonts
-brew tap caskroom/fonts
 
 # Install apps to /Applications
 # Default is: /Users/$user/Applications
 echo "installing apps..."
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 brew cask install ${apps[@]} || true
-
-pip install neovim --upgrade --user
-pip3 install neovim --upgrade --user
