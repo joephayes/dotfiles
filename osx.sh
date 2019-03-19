@@ -57,6 +57,7 @@ binaries=(
   pinentry-mac
   daemontools
   rust
+  jq
   )
 
 echo "installing binaries..."
