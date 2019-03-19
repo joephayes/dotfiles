@@ -57,8 +57,11 @@ Plugin 'tpope/vim-obsession'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'snoe/clj-refactor.nvim', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
-Plugin 'eraserhd/parinfer-rust', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+
+if has('nvim')
+  Plugin 'snoe/clj-refactor.nvim', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+  Plugin 'eraserhd/parinfer-rust', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+endif
 
 call vundle#end()
 
@@ -77,7 +80,7 @@ endif
 let g:slime_target = "tmux"
 
 " vim-sexp
-" let g:sexp_enable_insert_mode_mappings = 0
+let g:sexp_enable_insert_mode_mappings = 0
 
 " Set up CTRL P
 " First set up patterns to ignore
