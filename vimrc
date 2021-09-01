@@ -5,7 +5,7 @@ if has('unix')
   let g:python_host_prog='/usr/bin/python'
   let g:python3_host_prog='/usr/bin/python3'
   if s:uname == "Darwin\n"
-    let g:python_host_prog='/usr/local/bin/python2'
+    let g:python_host_prog='/usr/bin/python2'
     let g:python3_host_prog='/usr/local/bin/python3'
   endif
 endif
@@ -18,52 +18,47 @@ let maplocalleader = "\\"
 
 filetype off
 
-if has('win32') || has('win64')
-  set rtp+=~/vimfiles/bundle/vundle.vim/
-  call vundle#begin('$HOME/vimfiles/bundle/')
-else
-  " Usual quickstart instructions
-  set rtp+=~/.vim/bundle/vundle.vim/
-  call vundle#begin()
-endif
+call plug#begin()
 
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'itchyny/lightline.vim'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'hail2u/vim-css3-syntax'
-Plugin 'ap/vim-css-color'
-Plugin 'Raimondi/delimitMate'
-Plugin 'tpope/vim-fugitive'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'w0rp/ale'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'docunext/closetag.vim'
-Plugin 'vim-scripts/supertab'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'tpope/vim-endwise'
-Plugin 'tpope/vim-sleuth'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-rhubarb'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-fireplace', { 'for': ['clj','cljs','cljx','clojure'] }
-Plugin 'guns/vim-sexp', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
-Plugin 'tpope/vim-sexp-mappings-for-regular-people', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
-Plugin 'luochen1990/rainbow'
-Plugin 'jpalardy/vim-slime'
-Plugin 'mileszs/ack.vim'
-Plugin 'tpope/vim-obsession'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'scrooloose/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plug 'roman/golden-ratio'
+Plug 'itchyny/lightline.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'hail2u/vim-css3-syntax'
+Plug 'ap/vim-css-color'
+Plug 'Raimondi/delimitMate'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'w0rp/ale'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'altercation/vim-colors-solarized'
+Plug 'docunext/closetag.vim'
+Plug 'vim-scripts/supertab'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'guns/vim-sexp', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+Plug 'tpope/vim-sexp-mappings-for-regular-people', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+Plug 'luochen1990/rainbow'
+Plug 'jpalardy/vim-slime'
+Plug 'mileszs/ack.vim'
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-unimpaired'
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 if has('nvim')
-  Plugin 'snoe/clj-refactor.nvim', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
-  Plugin 'eraserhd/parinfer-rust', { 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+  Plug 'clojure-vim/clj-refactor.nvim', { 'do': ':UpdateRemotePlugins', 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+  Plug 'Olical/conjure', {'tag': 'v4.7.0', 'for': ['clj','cljs','cljx','clojure']}
+  Plug 'eraserhd/parinfer-rust', { 'do': 'cargo build --release', 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
+else
+  Plug 'tpope/vim-fireplace', { 'for': ['clj','cljs','cljx','clojure'] }
 endif
 
-call vundle#end()
+call plug#end()
 
 filetype plugin indent on
 
@@ -78,6 +73,7 @@ if executable('ag')
 endif
 
 let g:slime_target = "tmux"
+let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 
 " vim-sexp
 let g:sexp_enable_insert_mode_mappings = 0
@@ -113,7 +109,14 @@ let g:ctrlp_switch_buffer = 0
 
 let g:ctrlp_match_window = 'results:30'
 
+"Conjure
+let g:conjure_log_direction = 'horizontal'
+let g:conjure_log_blacklist = ['up','ret','re-multiline','load-file','eval']
+
 " ALE
+let g:ale_linters = {
+      \ 'clojure': ['clj-kondo', 'joker']
+      \ }
 let g:ale_sign_warning = '▲'
 let g:ale_sign_error = '✗'
 highlight link ALEWarningSign String
@@ -169,7 +172,7 @@ function! s:MaybeUpdateLightline()
   end
 endfunction
 
-if has("gui_running")
+if has('gui_running')
   set guioptions-=m
   set guioptions-=T
   if has('win32') || has('win64')
@@ -181,7 +184,7 @@ if has("gui_running")
   set background=light
   set lines=40                " 40 lines of text instead of 24,
 else
-  set background=dark
+  set background=light
   if !has('win32') && !has('win64') && !has('nvim')
     set term=builtin_ansi       " Make arrow and other keys work\
   endif
@@ -192,6 +195,12 @@ let g:solarized_visibility="normal"
 " Define color scheme
 colorscheme solarized
 
+let rainbow_background = "light"
+let lightcolors =  ['lightblue', 'lightyellow', 'red', 'darkgreen', 'darkyellow', 'lightred', 'yellow', 'cyan', 'magenta', 'white']
+let darkcolors = ['DarkBlue', 'Magenta', 'Black', 'Red', 'DarkGray', 'DarkGreen', 'DarkYellow']
+let g:rainbow_conf = {
+\   'ctermfgs': (rainbow_background == "light"? darkcolors : lightcolors)
+\}
 let g:rainbow_active = 1
 
 " always show what mode we're currently editing in
@@ -364,9 +373,9 @@ let indent_guides_start_level = 2
 " Fix indent guide colors to use solarized colors
 " https://github.com/nathanaelkane/vim-indent-guides#setting-custom-indent-colors
 " For 16 colors term bg colors, base03 => 8, base02 => 0, base01 => 10
-let g:indent_guides_auto_colors = 0
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=236
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#073642 ctermbg=237
+" let g:indent_guides_auto_colors = 0
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#073642 ctermbg=236
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#073642 ctermbg=237
 
 if exists('+colorcolumn')
   set colorcolumn=80
@@ -445,9 +454,9 @@ au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
 " Markdown (tab width 2 chr, wrapping at 80)
 autocmd FileType markdown setlocal wrap
-autocmd FileType markdown set sw=2
-autocmd FileType markdown set ts=2
-autocmd FileType markdown set sts=2
+autocmd FileType markdown set sw=4
+autocmd FileType markdown set ts=4
+autocmd FileType markdown set sts=4
 autocmd FileType markdown set textwidth=80
 " CLojure specific
 au BufEnter *.clj nnoremap <buffer> cpt :Eval<CR>
