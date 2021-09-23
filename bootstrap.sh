@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -ex
 
 # bootstrap installs things.
 
@@ -65,25 +65,25 @@ if "test ! -d ~/.tmux/plugins/tpm" \
       run '~/.tmux/plugins/tpm/tpm'
 
 echo "init vim ..."
-if [ ! -d vim/bundle/Vundle.vim ]; then
-    git clone https://github.com/VundleVim/Vundle.vim.git vim/bundle/Vundle.vim
-fi
-
 if isWindows; then
     cmd //c mklink //d "%USERPROFILE%\\vimfiles" "%cd%\\vim"
 else
     link vim
 fi
-
 link vimrc
-vim +BundleInstall! +qall
+
+echo "init nvim..."
+mkdir mkdir -p ~/.config/nvim/
+ln -s "`$pwd`/init.vim" ~/.config/nvim/init.vim
+
+curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master.plug.vim
 
 echo "init postgres"
 link psqlrc
 
-echo "init nvim"
-pip2 install pynvim neovim --upgrade --user --no-cache-dir
-pip3 install pynvim neovim --upgrade --user --no-cache-dir
-nvim +UpdateRemotePlugins +qall
+mkdir ~/bin
+ln -s "`$pwd`/git-nice" ~/bin/git-nice
+ln -s "`$pwd`/git-branch-scrub" ~/bin/git-branch-scrub
+ln -s "`$pwd`/vim-update-plugins.sh" ~/bin/vim-update-plugins.sh
 
 source ~/.bash_profile

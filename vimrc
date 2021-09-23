@@ -2,10 +2,8 @@ scriptencoding utf-8
 
 if has('unix')
   let s:uname = system('uname')
-  let g:python_host_prog='/usr/bin/python'
   let g:python3_host_prog='/usr/bin/python3'
   if s:uname == "Darwin\n"
-    let g:python_host_prog='/usr/bin/python2'
     let g:python3_host_prog='/usr/local/bin/python3'
   endif
 endif
@@ -52,7 +50,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 
 if has('nvim')
   Plug 'clojure-vim/clj-refactor.nvim', { 'do': ':UpdateRemotePlugins', 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
-  Plug 'Olical/conjure', {'tag': 'v4.7.0', 'for': ['clj','cljs','cljx','clojure']}
+  Plug 'Olical/conjure', {'tag': 'v4.23.0', 'for': ['clj','cljs','cljx','clojure']}
   Plug 'eraserhd/parinfer-rust', { 'do': 'cargo build --release', 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
 else
   Plug 'tpope/vim-fireplace', { 'for': ['clj','cljs','cljx','clojure'] }

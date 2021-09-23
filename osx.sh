@@ -8,7 +8,7 @@ set -e
 # Install if we don't have it
 if ! type brew >/dev/null; then
   echo "Installing homebrew..."
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 # Update homebrew recipes
@@ -27,8 +27,9 @@ brew install inetutils
 brew install bash
 
 # Install latest Java (required by Clojure)
-brew tap caskroom/cask
-brew cask install java 
+brew tap homebrew/cask
+brew install java
+sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
 
 binaries=(
   wget
@@ -36,7 +37,6 @@ binaries=(
   clojure
   openssl
   graphicsmagick
-  python@2
   python
   trash
   node
@@ -47,7 +47,6 @@ binaries=(
   vim
   tmux
   neovim
-  leiningen
   bash-completion
   bash-git-prompt
   reattach-to-user-namespace
@@ -70,43 +69,27 @@ mkdir -p ~/.gnupg
 echo 'pinentry-program /usr/local/bin/pinentry-mac' >> ~/.gnupg/gpg-agent.conf
 
 # Install tap for fonts
-brew tap caskroom/fonts
+brew tap homebrew/cask-fonts
 
 # Apps
 apps=(
   eclipse-jee
-  keepassx
   qlimagesize
-  dropbox
-  google-hangouts
-  google-backup-and-sync
   google-chrome
-  qlcolorcode
-  slack
   appcleaner
   firefox
   qlmarkdown
-  vagrant
   iterm2
   qlprettypatch
-  virtualbox
-  qlstephen
   vlc
-  nvalt
   quicklook-csv
   quicklook-json
-  skype
-  epubquicklook
   sourcetree
-  xquartz
-  gimp
   font-inconsolata
-  visual-studio-code
-  spotify
 )
 
 # Install apps to /Applications
 # Default is: /Users/$user/Applications
 echo "installing apps..."
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-brew cask install ${apps[@]} || true
+brew install ${apps[@]} || true

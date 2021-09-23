@@ -2,7 +2,7 @@
 
 export JAVA_HOME=$(/usr/libexec/java_home)
 export PATH="${JAVA_HOME}/bin"
-export CDPATH=".:~/src"
+export CDPATH=".:~/dev"
 export GOPATH=$HOME/golang
 export GOROOT=/usr/local/opt/go/libexec
 export GOBIN=$GOPATH/bin

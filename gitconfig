@@ -3,7 +3,7 @@
 [apply]
 	whitespace = fix
 [core]
-        excludesfile = ~/.gitignore
+	excludesfile = /Users/joehayes/.gitignore
 	attributesfile = ~/.gitattributes
 	whitespace = fix,space-before-tab,tab-in-indent,trailing-space
 	autocrlf = false
@@ -30,3 +30,14 @@
         path = nvim
 [grep]
 	lineNumber = true
+[user]
+	name = Joe Hayes
+	email = joe@telegraph.io
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[commit]
+	template = /Users/joehayes/.stCommitMsg
