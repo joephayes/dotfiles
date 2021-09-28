@@ -1,5 +1,8 @@
 #!/bin/bash
+
+MAIN_BRANCH_NAME=${1:-main}
+
 set -e
-git checkout master
+git checkout $MAIN_BRANCH_NAME
 git pull
 git branch-scrub
