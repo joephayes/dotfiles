@@ -39,7 +39,6 @@ binaries=(
   graphicsmagick
   python
   trash
-  node
   tree
   ack
   hub
@@ -57,6 +56,7 @@ binaries=(
   daemontools
   rust
   jq
+  nvm
   )
 
 echo "installing binaries..."
