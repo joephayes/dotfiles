@@ -25,6 +25,7 @@ export PATH=$PATH:/bin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:/usr/sbin
 export PATH=$PATH:/sbin
+export PATH=/Library/Frameworks/Python.framework/Versions/3.9/bin:$PATH
 
 # Fixes "RE error: illegal byte sequence" for sed search/replace on osx
 # http://stackoverflow.com/questions/19242275/re-error-illegal-byte-sequence-on-mac-os-x

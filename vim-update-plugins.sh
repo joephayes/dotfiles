@@ -9,6 +9,8 @@ $HOME/.tmux/plugins/tpm/bin/clean_plugins
 $HOME/.tmux/plugins/tpm/bin/update_plugins all
 nvim +PlugInstall! +PlugUpdate! +PlugUpgrade +qall
 python3 -m pip install --user --upgrade pynvim
-#python2 -m pip install --user --upgrade pynvim
+python3 -m pip install --user --upgrade flake8
+python3 -m pip install --user --upgrade pylint
+python3 -m pip install --user --upgrade yapf
 npm install -g neovim
 nvim +UpdateRemotePlugins +qall

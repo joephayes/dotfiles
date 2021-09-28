@@ -113,8 +113,13 @@ let g:conjure_log_blacklist = ['up','ret','re-multiline','load-file','eval']
 
 " ALE
 let g:ale_linters = {
+      \ 'python': ['flake8', 'pylint'],
+      \ 'javascript': ['eslint'],
       \ 'clojure': ['clj-kondo', 'joker']
       \ }
+let g:ale_fixers = {
+      \    'python': ['yapf'],
+      \}
 let g:ale_sign_warning = '▲'
 let g:ale_sign_error = '✗'
 highlight link ALEWarningSign String
