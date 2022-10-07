@@ -59,10 +59,11 @@ curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-pro
 echo "init tmux"
 link tmux.conf
 
-if "test ! -d ~/.tmux/plugins/tpm" \
-      "run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'"
+if [ ! -d ~/.tmux/plugins/tpm ]; then
+      run 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins'
 
       run '~/.tmux/plugins/tpm/tpm'
+fi
 
 echo "init vim ..."
 if isWindows; then
@@ -73,10 +74,11 @@ fi
 link vimrc
 
 echo "init nvim..."
-mkdir mkdir -p ~/.config/nvim/
+mkdir -p ~/.config/nvim/
 ln -s "`$pwd`/init.vim" ~/.config/nvim/init.vim
 
-curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master.plug.vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 echo "init postgres"
 link psqlrc

@@ -12,5 +12,5 @@ python3 -m pip install --user --upgrade pynvim
 python3 -m pip install --user --upgrade flake8
 python3 -m pip install --user --upgrade pylint
 python3 -m pip install --user --upgrade yapf
-npm install -g neovim
+npm install --location=global neovim
 nvim +UpdateRemotePlugins +qall

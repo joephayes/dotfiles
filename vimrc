@@ -50,7 +50,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 
 if has('nvim')
   Plug 'clojure-vim/clj-refactor.nvim', { 'do': ':UpdateRemotePlugins', 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
-  Plug 'Olical/conjure', {'tag': 'v4.23.0', 'for': ['clj','cljs','cljx','clojure']}
+  Plug 'Olical/conjure', {'for': ['clj','cljs','cljx','clojure']}
   Plug 'eraserhd/parinfer-rust', { 'do': 'cargo build --release', 'for': ['clj', 'cljs', 'cljx', 'clojure'] }
 else
   Plug 'tpope/vim-fireplace', { 'for': ['clj','cljs','cljx','clojure'] }
