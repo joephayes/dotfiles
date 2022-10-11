@@ -46,7 +46,7 @@ binaries=(
   vim
   tmux
   neovim
-  bash-completion
+  bash-completion@2
   bash-git-prompt
   reattach-to-user-namespace
   the_silver_searcher
