@@ -1,0 +1,237 @@
+// =============================================================================
+// VS Code Keybindings
+// Vim-friendly bindings that don't conflict with vim extension
+// =============================================================================
+[
+  // -------------------------------------------------------------------------
+  // Navigation
+  // -------------------------------------------------------------------------
+  
+  // Quick open (Cmd/Ctrl+P already default, but ensure it works)
+  {
+    "key": "ctrl+p",
+    "command": "workbench.action.quickOpen",
+    "when": "!inQuickOpen"
+  },
+  
+  // Go to symbol in file
+  {
+    "key": "ctrl+shift+o",
+    "command": "workbench.action.gotoSymbol"
+  },
+
+  // -------------------------------------------------------------------------
+  // Sidebar / Panels
+  // -------------------------------------------------------------------------
+  
+  // Toggle sidebar
+  {
+    "key": "ctrl+\\",
+    "command": "workbench.action.toggleSidebarVisibility"
+  },
+  
+  // Focus explorer
+  {
+    "key": "ctrl+shift+e",
+    "command": "workbench.view.explorer",
+    "when": "viewContainer.workbench.view.explorer.enabled"
+  },
+  
+  // Focus source control
+  {
+    "key": "ctrl+shift+g",
+    "command": "workbench.view.scm"
+  },
+  
+  // Toggle terminal
+  {
+    "key": "ctrl+`",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+  
+  // Toggle problems panel
+  {
+    "key": "ctrl+shift+m",
+    "command": "workbench.actions.view.problems"
+  },
+
+  // -------------------------------------------------------------------------
+  // Editor Management
+  // -------------------------------------------------------------------------
+  
+  // Split editor
+  {
+    "key": "ctrl+\\",
+    "command": "workbench.action.splitEditor",
+    "when": "editorFocus"
+  },
+  
+  // Close editor
+  {
+    "key": "ctrl+w",
+    "command": "workbench.action.closeActiveEditor"
+  },
+  
+  // Navigate editor groups (supplements vim C-h/j/k/l)
+  {
+    "key": "ctrl+1",
+    "command": "workbench.action.focusFirstEditorGroup"
+  },
+  {
+    "key": "ctrl+2",
+    "command": "workbench.action.focusSecondEditorGroup"
+  },
+  {
+    "key": "ctrl+3",
+    "command": "workbench.action.focusThirdEditorGroup"
+  },
+
+  // -------------------------------------------------------------------------
+  // Terminal
+  // -------------------------------------------------------------------------
+  
+  // Create new terminal
+  {
+    "key": "ctrl+shift+`",
+    "command": "workbench.action.terminal.new"
+  },
+  
+  // Focus terminal
+  {
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.terminal.focus"
+  },
+  
+  // Focus editor from terminal
+  {
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "terminalFocus"
+  },
+
+  // -------------------------------------------------------------------------
+  // Search
+  // -------------------------------------------------------------------------
+  
+  // Search in files
+  {
+    "key": "ctrl+shift+f",
+    "command": "workbench.action.findInFiles"
+  },
+  
+  // Replace in files
+  {
+    "key": "ctrl+shift+h",
+    "command": "workbench.action.replaceInFiles"
+  },
+
+  // -------------------------------------------------------------------------
+  // Vim-specific overrides
+  // -------------------------------------------------------------------------
+  
+  // Let Ctrl+C work for copy in visual mode
+  {
+    "key": "ctrl+c",
+    "command": "editor.action.clipboardCopyAction",
+    "when": "editorTextFocus && vim.mode == 'Visual'"
+  },
+  
+  // Let Ctrl+V work for paste in insert mode
+  {
+    "key": "ctrl+v",
+    "command": "editor.action.clipboardPasteAction",
+    "when": "editorTextFocus && vim.mode == 'Insert'"
+  },
+  
+  // Escape to clear search highlight and close widgets
+  {
+    "key": "escape",
+    "command": "workbench.action.closeQuickOpen",
+    "when": "inQuickOpen"
+  },
+  {
+    "key": "escape",
+    "command": "closeFindWidget",
+    "when": "editorFocus && findWidgetVisible"
+  },
+
+  // -------------------------------------------------------------------------
+  // Intellisense / Autocomplete
+  // -------------------------------------------------------------------------
+  
+  // Trigger suggest
+  {
+    "key": "ctrl+space",
+    "command": "editor.action.triggerSuggest",
+    "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly"
+  },
+  
+  // Accept suggestion with Tab
+  {
+    "key": "tab",
+    "command": "acceptSelectedSuggestion",
+    "when": "suggestWidgetVisible && textInputFocus"
+  },
+  
+  // Navigate suggestions with Ctrl+j/k
+  {
+    "key": "ctrl+j",
+    "command": "selectNextSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "selectPrevSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+  },
+
+  // -------------------------------------------------------------------------
+  // Quick Open navigation with Ctrl+j/k
+  // -------------------------------------------------------------------------
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.quickOpenSelectNext",
+    "when": "inQuickOpen"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "workbench.action.quickOpenSelectPrevious",
+    "when": "inQuickOpen"
+  },
+
+  // -------------------------------------------------------------------------
+  // Calva (Clojure) - REPL bindings
+  // -------------------------------------------------------------------------
+  
+  // Evaluate current form
+  {
+    "key": "ctrl+enter",
+    "command": "calva.evaluateCurrentTopLevelForm",
+    "when": "calva:connected && editorLangId == 'clojure' && editorTextFocus && !editorReadOnly && !hasOtherSuggestions && !suggestWidgetVisible"
+  },
+  
+  // Evaluate selection
+  {
+    "key": "ctrl+shift+enter",
+    "command": "calva.evaluateSelection",
+    "when": "calva:connected && editorLangId == 'clojure' && editorTextFocus"
+  },
+  
+  // Load file
+  {
+    "key": "ctrl+alt+c enter",
+    "command": "calva.loadFile",
+    "when": "calva:connected && editorLangId == 'clojure'"
+  },
+
+  // -------------------------------------------------------------------------
+  // Disable conflicting defaults
+  // -------------------------------------------------------------------------
+  
+  // Disable Ctrl+K chord (used by vim)
+  {
+    "key": "ctrl+k",
+    "command": "-workbench.action.terminal.clear",
+    "when": "terminalFocus"
+  }
+]

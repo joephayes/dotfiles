@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Delete local branches merged into default branch
+set -e
+
+git remote prune origin
+
+current=$(git branch --show-current)
+default=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+[[ -z "$default" ]] && for b in main master; do git show-ref -q "refs/heads/$b" && default=$b && break; done
+[[ -z "$default" ]] && { echo "Cannot determine default branch"; exit 1; }
+
+merged=$(git branch --merged | grep -v -e '\*' -e "^[[:space:]]*$current$" -e "^[[:space:]]*$default$" | sed 's/^[[:space:]]*//' | grep -v '^$' || true)
+
+if [[ -n "$merged" ]]; then
+    echo "Deleting: $merged"
+    echo "$merged" | xargs git branch -d
+else
+    echo "No merged branches to delete"
+fi

@@ -1,0 +1,155 @@
+# =============================================================================
+# Global Git Ignore (.gitignore_global)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# OS Generated
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# -----------------------------------------------------------------------------
+# Editors & IDEs
+# -----------------------------------------------------------------------------
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+Session.vim
+.vim/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# -----------------------------------------------------------------------------
+# Languages & Frameworks
+# -----------------------------------------------------------------------------
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+.env
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+pip-log.txt
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn/cache
+.pnp.*
+
+# Clojure
+.lein-*
+.nrepl-port
+.cpcache/
+target/
+*.jar
+
+# Java / JVM
+*.class
+*.log
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+
+# Rust
+/target/
+Cargo.lock
+*.rs.bk
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.dylib
+*.test
+*.out
+go.work
+
+# -----------------------------------------------------------------------------
+# Build & Dependencies
+# -----------------------------------------------------------------------------
+*.o
+*.a
+*.lib
+*.out
+*.lock
+!package-lock.json
+!yarn.lock
+!Cargo.lock
+
+# -----------------------------------------------------------------------------
+# Environment & Secrets
+# -----------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+.secret*
+credentials.json
+
+# -----------------------------------------------------------------------------
+# Logs & Databases
+# -----------------------------------------------------------------------------
+*.log
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+
+# -----------------------------------------------------------------------------
+# Misc
+# -----------------------------------------------------------------------------
+*.bak
+*.backup
+*.tmp
+*.temp
+*.cache
+.cache/
