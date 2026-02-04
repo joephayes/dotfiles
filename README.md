@@ -16,12 +16,11 @@ To backup existing configs first: `./cleanup.sh` then `./install.sh`
 
 | File | Purpose |
 |------|---------|
-| `.bashrc` | Shell config with aliases for git, python, node, postgres |
+| `.bashrc` | Shell config with git-aware prompt, aliases for git, python, node, postgres |
 | `.tmux.conf` | tmux with vim-style navigation, Solarized theme |
-| `nvim/init.lua` | Neovim with LSP (Python, JS, Clojure, Bash), Telescope, Treesitter |
+| `nvim/init.lua` | Neovim 0.11+ with native LSP, Telescope, Treesitter |
 | `.gitconfig` | Git defaults (edit name/email after install) |
 | `.psqlrc` | PostgreSQL client settings |
-| `config/starship.toml` | Cross-shell prompt |
 
 ## Key bindings
 
@@ -35,6 +34,7 @@ To backup existing configs first: `./cleanup.sh` then `./install.sh`
 - `|` split vertical, `-` split horizontal
 - `C-h/j/k/l` navigate panes (works with vim)
 - `prefix + r` reload config
+- `prefix + I` install TPM plugins (run once after install)
 
 ## Clipboard
 
@@ -47,7 +47,8 @@ Works locally and over SSH (via OSC 52). Requires terminal support:
 1. Edit `~/.gitconfig` with your name/email
 2. Restart shell: `source ~/.bashrc`
 3. Open nvim - plugins auto-install
-4. In tmux, press `prefix + I` to install plugins (optional)
+4. In tmux: `prefix + I` to install TPM plugins
+5. VS Code: "Solarized Light" is built-in. If not working, run `Preferences: Color Theme` and select it.
 
 ## Local overrides
 

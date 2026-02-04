@@ -8,7 +8,6 @@
   // Appearance
   // -------------------------------------------------------------------------
   "workbench.colorTheme": "Solarized Light",
-  "workbench.iconTheme": "vs-solarized",
   "workbench.startupEditor": "none",
   "workbench.editor.enablePreview": false,
   "workbench.activityBar.location": "default",

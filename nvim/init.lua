@@ -1,4 +1,5 @@
 -- Neovim config - Solarized Light, LSP for Python/JS/Clojure/Bash
+-- Requires nvim 0.10+
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -26,7 +27,7 @@ vim.g.loaded_netrw, vim.g.loaded_netrwPlugin = 1, 1
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable",
         "https://github.com/folke/lazy.nvim.git", lazypath })
 end
@@ -73,52 +74,28 @@ require("lazy").setup({
         end,
     },
 
-    -- Treesitter
+    -- Treesitter (syntax highlighting) - just for installing parsers
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         config = function()
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = { "python", "javascript", "typescript", "json", "clojure", "bash", "lua", "vim", "vimdoc", "html", "css", "yaml", "markdown", "sql" },
-                highlight = { enable = true },
-                indent = { enable = true },
+            -- nvim 0.11+ has treesitter built-in, this plugin just installs parsers
+            vim.treesitter.language.register("bash", "sh")
+            -- Ensure parsers are installed
+            local parsers = { "python", "javascript", "typescript", "json", "clojure", "bash", "lua", "vim", "vimdoc", "html", "css", "yaml", "markdown", "sql" }
+            vim.api.nvim_create_autocmd("VimEnter", {
+                callback = function()
+                    for _, lang in ipairs(parsers) do
+                        pcall(function() vim.treesitter.start(0, lang) end)
+                    end
+                end,
+                once = true,
             })
         end,
     },
 
-    -- LSP
-    {
-        "neovim/nvim-lspconfig",
-        dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim", "hrsh7th/cmp-nvim-lsp" },
-        config = function()
-            require("mason").setup()
-            require("mason-lspconfig").setup({
-                ensure_installed = { "pyright", "ts_ls", "clojure_lsp", "bashls", "lua_ls" },
-                automatic_installation = true,
-            })
-
-            local lspconfig = require("lspconfig")
-            local caps = require("cmp_nvim_lsp").default_capabilities()
-            local on_attach = function(_, bufnr)
-                local map = function(keys, fn, desc) vim.keymap.set("n", keys, fn, { buffer = bufnr, desc = desc }) end
-                map("gd", vim.lsp.buf.definition, "Definition")
-                map("gr", vim.lsp.buf.references, "References")
-                map("K", vim.lsp.buf.hover, "Hover")
-                map("<leader>rn", vim.lsp.buf.rename, "Rename")
-                map("<leader>ca", vim.lsp.buf.code_action, "Code action")
-                map("[d", vim.diagnostic.goto_prev, "Prev diagnostic")
-                map("]d", vim.diagnostic.goto_next, "Next diagnostic")
-            end
-
-            for _, server in ipairs({ "pyright", "ts_ls", "clojure_lsp", "bashls" }) do
-                lspconfig[server].setup({ capabilities = caps, on_attach = on_attach })
-            end
-            lspconfig.lua_ls.setup({
-                capabilities = caps, on_attach = on_attach,
-                settings = { Lua = { diagnostics = { globals = { "vim" } }, workspace = { checkThirdParty = false } } },
-            })
-        end,
-    },
+    -- Mason (LSP/tool installer)
+    { "williamboman/mason.nvim", opts = {} },
 
     -- Completion
     {
@@ -168,6 +145,40 @@ require("lazy").setup({
     },
 }, { checker = { enabled = false }, change_detection = { notify = false } })
 
+-- LSP Setup (native nvim 0.11+ API)
+local caps = vim.lsp.protocol.make_client_capabilities()
+local cmp_caps = pcall(require, "cmp_nvim_lsp") and require("cmp_nvim_lsp").default_capabilities() or {}
+caps = vim.tbl_deep_extend("force", caps, cmp_caps)
+
+-- LSP keymaps on attach
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+        local map = function(keys, fn, desc)
+            vim.keymap.set("n", keys, fn, { buffer = args.buf, desc = desc })
+        end
+        map("gd", vim.lsp.buf.definition, "Definition")
+        map("gr", vim.lsp.buf.references, "References")
+        map("K", vim.lsp.buf.hover, "Hover")
+        map("<leader>rn", vim.lsp.buf.rename, "Rename")
+        map("<leader>ca", vim.lsp.buf.code_action, "Code action")
+        map("[d", vim.diagnostic.goto_prev, "Prev diagnostic")
+        map("]d", vim.diagnostic.goto_next, "Next diagnostic")
+    end,
+})
+
+-- Configure LSP servers using native vim.lsp.config (nvim 0.11+)
+if vim.lsp.config then
+    vim.lsp.config("pyright", { capabilities = caps })
+    vim.lsp.config("ts_ls", { capabilities = caps })
+    vim.lsp.config("clojure_lsp", { capabilities = caps })
+    vim.lsp.config("bashls", { capabilities = caps })
+    vim.lsp.config("lua_ls", {
+        capabilities = caps,
+        settings = { Lua = { diagnostics = { globals = { "vim" } }, workspace = { checkThirdParty = false } } },
+    })
+    vim.lsp.enable({ "pyright", "ts_ls", "clojure_lsp", "bashls", "lua_ls" })
+end
+
 -- Keymaps
 local map = vim.keymap.set
 map("n", "<Esc>", ":noh<CR>", { silent = true })
@@ -198,9 +209,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function() vim.highlight.on_yank({ timeout = 150 }) end,
 })
 
--- Clipboard (OSC 52 for SSH, native otherwise)
-local function is_ssh() return os.getenv("SSH_TTY") ~= nil end
-if is_ssh() and vim.fn.has("nvim-0.10") == 1 then
+-- Clipboard (OSC 52 for SSH)
+if os.getenv("SSH_TTY") and vim.fn.has("nvim-0.10") == 1 then
     vim.g.clipboard = {
         name = "OSC 52",
         copy = { ["+"] = require("vim.ui.clipboard.osc52").copy("+"), ["*"] = require("vim.ui.clipboard.osc52").copy("*") },

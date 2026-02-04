@@ -29,7 +29,7 @@ install_deps() {
     
     if [[ "$OS" == "macos" ]]; then
         has brew || { /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"; }
-        for pkg in neovim tmux fzf ripgrep fd starship; do
+        for pkg in neovim tmux fzf ripgrep fd; do
             brew list "$pkg" &>/dev/null || brew install "$pkg"
         done
     elif [[ "$OS" == "linux" ]] && has apt-get; then
@@ -38,7 +38,6 @@ install_deps() {
         for pkg in neovim tmux fzf ripgrep fd-find xclip; do
             dpkg -s "$pkg" &>/dev/null || sudo apt-get install -y "$pkg"
         done
-        has starship || curl -sS https://starship.rs/install.sh | sh -s -- -y
     fi
     
     has uv || curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -57,7 +56,6 @@ install_symlinks() {
     link "$DOTFILES/.gitignore_global" ~/.gitignore_global
     link "$DOTFILES/.psqlrc" ~/.psqlrc
     link "$DOTFILES/nvim/init.lua" ~/.config/nvim/init.lua
-    link "$DOTFILES/config/starship.toml" ~/.config/starship.toml
     
     mkdir -p ~/bin
     for f in "$DOTFILES/bin/"*; do [[ -f "$f" ]] && link "$f" ~/bin/"$(basename "$f")"; done

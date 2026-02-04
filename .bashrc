@@ -14,7 +14,6 @@ HISTSIZE=50000
 HISTFILESIZE=100000
 HISTTIMEFORMAT="%F %T "
 shopt -s histappend cmdhist
-PROMPT_COMMAND="history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 
 # --- Shell Options ---
 shopt -s checkwinsize cdspell extglob
@@ -147,7 +146,44 @@ if command -v fzf &>/dev/null; then
 fi
 
 # --- Prompt ---
-command -v starship &>/dev/null && eval "$(starship init bash)" || PS1='\u@\h:\w\$ '
+# Style: [exit_status] user@host workdir [git_branch git_status]
+#        HH:MM $
+
+__prompt_command() {
+    local exit_code=$?
+    local red='\[\e[0;31m\]'
+    local green='\[\e[0;32m\]'
+    local yellow='\[\e[0;33m\]'
+    local blue='\[\e[0;34m\]'
+    local cyan='\[\e[0;36m\]'
+    local reset='\[\e[0m\]'
+    
+    # Exit status indicator
+    local indicator
+    if [[ $exit_code -eq 0 ]]; then
+        indicator="${green}✓${reset}"
+    else
+        indicator="${red}✗${reset}"
+    fi
+    
+    # Git info
+    local git_info=""
+    if git rev-parse --git-dir &>/dev/null; then
+        local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+        local status=""
+        
+        # Check for changes
+        git diff --quiet 2>/dev/null || status+="*"
+        git diff --cached --quiet 2>/dev/null || status+="+"
+        [[ -n $(git ls-files --others --exclude-standard 2>/dev/null) ]] && status+="?"
+        
+        git_info=" ${cyan}(${branch}${status})${reset}"
+    fi
+    
+    PS1="${indicator} \u@\h ${yellow}\w${reset}${git_info}\n${reset}\$(date +%H:%M) \$ "
+}
+
+PROMPT_COMMAND="__prompt_command; history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 
 # --- Completions ---
 [[ -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion

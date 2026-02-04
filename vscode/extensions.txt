@@ -4,8 +4,9 @@
 # Vim
 vscodevim.vim
 
-# Theme (Solarized)
+# Theme (Solarized) - install one of these
 ryanolsonx.solarized
+armandphilippot.coldark
 
 # Languages
 ms-python.python
