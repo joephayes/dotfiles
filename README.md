@@ -22,13 +22,36 @@ To backup existing configs first: `./cleanup.sh` then `./install.sh`
 | `.gitconfig` | Git defaults (edit name/email after install) |
 | `.psqlrc` | PostgreSQL client settings |
 
+## Language Support
+
+**Python** - LSP via pyright, managed with uv:
+- `mkvenv` - create .venv and activate
+- `venv` - activate existing .venv
+- `uvr` - uv run, `uvs` - uv sync, `uva` - uv add
+- `uvpy` - uv python (install/manage Python versions)
+
+**Node.js** - LSP via ts_ls, managed with nvm:
+- `nvm install --lts` - install latest LTS
+- `nvm use <version>` - switch versions
+
+**Clojure** - LSP via clojure_lsp, REPL via Conjure:
+- `,ee` - eval expression, `,eb` - eval buffer
+- `,lv` - show log buffer
+
+**Bash** - LSP via bashls, linting via shellcheck, formatting via shfmt:
+- `<leader>lf` - format buffer
+- Shellcheck diagnostics appear inline
+- 4-space indentation by default
+
+**SQL** - LSP via sqls, syntax via treesitter
+
 ## Key bindings
 
 **Neovim** (leader = space):
 - `<leader>ff` find files, `<leader>fg` grep, `<leader>fb` buffers
 - `<leader>e` file tree, `<leader>w` save, `<leader>q` quit
 - `gd` definition, `gr` references, `K` hover, `<leader>ca` code action
-- `<C-\>` terminal
+- `<C-\>` terminal, `<leader>cc` Claude Code
 
 **tmux** (prefix = C-b):
 - `|` split vertical, `-` split horizontal
@@ -47,8 +70,11 @@ Works locally and over SSH (via OSC 52). Requires terminal support:
 1. Edit `~/.gitconfig` with your name/email
 2. Restart shell: `source ~/.bashrc`
 3. Open nvim - plugins auto-install
-4. In tmux: `prefix + I` to install TPM plugins
-5. VS Code: "Solarized Light" is built-in. If not working, run `Preferences: Color Theme` and select it.
+4. In nvim, run `:Mason` to install LSP servers and tools:
+   - LSPs: `pyright`, `typescript-language-server`, `clojure-lsp`, `sqls`, `bash-language-server`
+   - Tools: `shfmt` (bash formatter), `ruff` (Python linter/formatter)
+5. In tmux: `prefix + I` to install TPM plugins
+6. VS Code: "Solarized Light" is built-in. If not working, run `Preferences: Color Theme` and select it.
 
 ## Local overrides
 

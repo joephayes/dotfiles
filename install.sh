@@ -29,13 +29,13 @@ install_deps() {
     
     if [[ "$OS" == "macos" ]]; then
         has brew || { /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"; }
-        for pkg in neovim tmux fzf ripgrep fd; do
+        for pkg in neovim tmux fzf ripgrep fd shellcheck shfmt; do
             brew list "$pkg" &>/dev/null || brew install "$pkg"
         done
     elif [[ "$OS" == "linux" ]] && has apt-get; then
         sudo apt-get update -qq
         grep -q "neovim-ppa" /etc/apt/sources.list.d/* 2>/dev/null || { sudo add-apt-repository -y ppa:neovim-ppa/unstable; sudo apt-get update -qq; }
-        for pkg in neovim tmux fzf ripgrep fd-find xclip; do
+        for pkg in neovim tmux fzf ripgrep fd-find xclip shellcheck; do
             dpkg -s "$pkg" &>/dev/null || sudo apt-get install -y "$pkg"
         done
     fi

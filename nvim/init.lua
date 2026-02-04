@@ -1,4 +1,5 @@
--- Neovim config - Solarized Light, LSP for Python/JS/Clojure/Bash
+-- Neovim config - Solarized Light
+-- LSP: Python (pyright), Node.js/JS/TS (ts_ls), Clojure (clojure_lsp), SQL (sqls), Bash
 -- Requires nvim 0.10+
 
 vim.g.mapleader = " "
@@ -122,6 +123,27 @@ require("lazy").setup({
     -- Git signs
     { "lewis6991/gitsigns.nvim", opts = {} },
 
+    -- Linting and formatting (for bash: shellcheck, shfmt)
+    {
+        "nvimtools/none-ls.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+            local null_ls = require("null-ls")
+            null_ls.setup({
+                sources = {
+                    -- Bash
+                    null_ls.builtins.diagnostics.shellcheck,
+                    null_ls.builtins.formatting.shfmt.with({
+                        extra_args = { "-i", "4", "-ci", "-bn" }, -- 4-space indent, case indent, binary ops on new line
+                    }),
+                    -- Python (ruff for fast linting/formatting)
+                    null_ls.builtins.formatting.ruff,
+                    null_ls.builtins.diagnostics.ruff,
+                },
+            })
+        end,
+    },
+
     -- Editing helpers
     { "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
     { "numToStr/Comment.nvim", opts = {} },
@@ -133,15 +155,28 @@ require("lazy").setup({
     -- Tmux integration
     { "christoomey/vim-tmux-navigator", lazy = false },
 
-    -- Terminal
+    -- Terminal (with Claude Code integration)
     {
         "akinsho/toggleterm.nvim",
         version = "*",
-        opts = {
-            open_mapping = [[<C-\>]],
-            direction = "float",
-            float_opts = { border = "curved", width = function() return math.floor(vim.o.columns * 0.85) end, height = function() return math.floor(vim.o.lines * 0.85) end },
-        },
+        config = function()
+            require("toggleterm").setup({
+                open_mapping = [[<C-\>]],
+                direction = "float",
+                float_opts = { border = "curved", width = function() return math.floor(vim.o.columns * 0.85) end, height = function() return math.floor(vim.o.lines * 0.85) end },
+            })
+
+            -- Claude Code terminal
+            local Terminal = require("toggleterm.terminal").Terminal
+            local claude = Terminal:new({
+                cmd = "claude",
+                hidden = true,
+                direction = "float",
+                float_opts = { border = "curved", width = function() return math.floor(vim.o.columns * 0.9) end, height = function() return math.floor(vim.o.lines * 0.9) end },
+                on_open = function() vim.cmd("startinsert!") end,
+            })
+            vim.keymap.set("n", "<leader>cc", function() claude:toggle() end, { desc = "Toggle Claude Code" })
+        end,
     },
 }, { checker = { enabled = false }, change_detection = { notify = false } })
 
@@ -172,11 +207,12 @@ if vim.lsp.config then
     vim.lsp.config("ts_ls", { capabilities = caps })
     vim.lsp.config("clojure_lsp", { capabilities = caps })
     vim.lsp.config("bashls", { capabilities = caps })
+    vim.lsp.config("sqls", { capabilities = caps })
     vim.lsp.config("lua_ls", {
         capabilities = caps,
         settings = { Lua = { diagnostics = { globals = { "vim" } }, workspace = { checkThirdParty = false } } },
     })
-    vim.lsp.enable({ "pyright", "ts_ls", "clojure_lsp", "bashls", "lua_ls" })
+    vim.lsp.enable({ "pyright", "ts_ls", "clojure_lsp", "bashls", "sqls", "lua_ls" })
 end
 
 -- Keymaps
@@ -204,6 +240,18 @@ vim.api.nvim_create_autocmd("FileType", {
     pattern = { "javascript", "typescript", "json", "yaml", "html", "css", "clojure" },
     callback = function() vim.opt_local.tabstop, vim.opt_local.shiftwidth = 2, 2 end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "sh", "bash" },
+    callback = function()
+        vim.opt_local.tabstop = 4
+        vim.opt_local.shiftwidth = 4
+        vim.opt_local.expandtab = true
+    end,
+})
+
+-- Format on <leader>lf
+map("n", "<leader>lf", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format buffer" })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function() vim.highlight.on_yank({ timeout = 150 }) end,
