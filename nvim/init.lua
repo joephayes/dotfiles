@@ -1,6 +1,6 @@
 -- Neovim config - Solarized Light
 -- LSP: Python (pyright), Node.js/JS/TS (ts_ls), Clojure (clojure_lsp), SQL (sqls), Bash
--- Requires nvim 0.10+
+-- Requires nvim 0.11+
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -18,6 +18,7 @@ o.scrolloff, o.sidescrolloff = 8, 8
 o.wrap = false
 o.colorcolumn = "88,120"
 o.hidden, o.swapfile, o.backup = true, false, false
+o.autoread = true
 o.undofile = true
 o.undodir = vim.fn.stdpath("data") .. "/undo"
 o.updatetime, o.timeoutlen = 250, 300
@@ -79,24 +80,22 @@ require("lazy").setup({
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
+        opts = {
+            ensure_installed = { "python", "javascript", "typescript", "json", "clojure", "bash", "lua", "vim", "vimdoc", "html", "css", "yaml", "markdown", "sql" },
+        },
         config = function()
-            -- nvim 0.11+ has treesitter built-in, this plugin just installs parsers
             vim.treesitter.language.register("bash", "sh")
-            -- Ensure parsers are installed
-            local parsers = { "python", "javascript", "typescript", "json", "clojure", "bash", "lua", "vim", "vimdoc", "html", "css", "yaml", "markdown", "sql" }
-            vim.api.nvim_create_autocmd("VimEnter", {
-                callback = function()
-                    for _, lang in ipairs(parsers) do
-                        pcall(function() vim.treesitter.start(0, lang) end)
-                    end
-                end,
-                once = true,
-            })
         end,
     },
 
     -- Mason (LSP/tool installer)
     { "williamboman/mason.nvim", opts = {} },
+    {
+        "williamboman/mason-lspconfig.nvim",
+        opts = {
+            ensure_installed = { "pyright", "ruff", "ts_ls", "clojure_lsp", "bashls", "sqls", "lua_ls" },
+        },
+    },
 
     -- Completion
     {
@@ -120,26 +119,26 @@ require("lazy").setup({
         end,
     },
 
-    -- Git signs
+    -- Git
     { "lewis6991/gitsigns.nvim", opts = {} },
-
-    -- Linting and formatting (for bash: shellcheck, shfmt)
     {
-        "nvimtools/none-ls.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
+        "NeogitOrg/neogit",
+        dependencies = { "sindrets/diffview.nvim" },
+        opts = {},
+    },
+
+    -- Key discovery
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
         config = function()
-            local null_ls = require("null-ls")
-            null_ls.setup({
-                sources = {
-                    -- Bash
-                    null_ls.builtins.diagnostics.shellcheck,
-                    null_ls.builtins.formatting.shfmt.with({
-                        extra_args = { "-i", "4", "-ci", "-bn" }, -- 4-space indent, case indent, binary ops on new line
-                    }),
-                    -- Python (ruff for fast linting/formatting)
-                    null_ls.builtins.formatting.ruff,
-                    null_ls.builtins.diagnostics.ruff,
-                },
+            require("which-key").add({
+                { "<leader>g", group = "git" },
+                { "<leader>f", group = "find" },
+                { "<leader>b", group = "buffer" },
+                { "<leader>l", group = "lsp" },
+                { "<leader>c", group = "code" },
+                { "<leader>r", group = "refactor" },
             })
         end,
     },
@@ -158,7 +157,7 @@ require("lazy").setup({
     -- Terminal (with Claude Code integration)
     {
         "akinsho/toggleterm.nvim",
-        version = "*",
+        lazy = false,
         config = function()
             require("toggleterm").setup({
                 open_mapping = [[<C-\>]],
@@ -171,9 +170,11 @@ require("lazy").setup({
             local claude = Terminal:new({
                 cmd = "claude",
                 hidden = true,
-                direction = "float",
-                float_opts = { border = "curved", width = function() return math.floor(vim.o.columns * 0.9) end, height = function() return math.floor(vim.o.lines * 0.9) end },
-                on_open = function() vim.cmd("startinsert!") end,
+                direction = "vertical",
+                on_open = function()
+                    vim.api.nvim_win_set_width(0, math.floor(vim.o.columns * 0.5))
+                    vim.cmd("startinsert!")
+                end,
             })
             vim.keymap.set("n", "<leader>cc", function() claude:toggle() end, { desc = "Toggle Claude Code" })
         end,
@@ -204,6 +205,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- Configure LSP servers using native vim.lsp.config (nvim 0.11+)
 if vim.lsp.config then
     vim.lsp.config("pyright", { capabilities = caps })
+    vim.lsp.config("ruff", { capabilities = caps })
     vim.lsp.config("ts_ls", { capabilities = caps })
     vim.lsp.config("clojure_lsp", { capabilities = caps })
     vim.lsp.config("bashls", { capabilities = caps })
@@ -212,28 +214,32 @@ if vim.lsp.config then
         capabilities = caps,
         settings = { Lua = { diagnostics = { globals = { "vim" } }, workspace = { checkThirdParty = false } } },
     })
-    vim.lsp.enable({ "pyright", "ts_ls", "clojure_lsp", "bashls", "sqls", "lua_ls" })
+    vim.lsp.enable({ "pyright", "ruff", "ts_ls", "clojure_lsp", "bashls", "sqls", "lua_ls" })
 end
 
 -- Keymaps
 local map = vim.keymap.set
 map("n", "<Esc>", ":noh<CR>", { silent = true })
-map("n", "<leader>w", ":w<CR>")
-map("n", "<leader>q", ":q<CR>")
-map("n", "<leader>e", ":NvimTreeToggle<CR>")
-map("n", "<leader>ff", ":Telescope find_files<CR>")
-map("n", "<leader>fg", ":Telescope live_grep<CR>")
-map("n", "<leader>fb", ":Telescope buffers<CR>")
-map("n", "<leader>fr", ":Telescope oldfiles<CR>")
+map("n", "<leader>w", ":w<CR>", { desc = "Save" })
+map("n", "<leader>q", ":q<CR>", { desc = "Quit" })
+map("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "File tree" })
+map("n", "<leader>g", ":Neogit<CR>", { desc = "Neogit" })
+map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Find files" })
+map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Grep" })
+map("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Buffers" })
+map("n", "<leader>fr", ":Telescope oldfiles<CR>", { desc = "Recent files" })
 map("n", "<S-l>", ":bnext<CR>", { silent = true })
 map("n", "<S-h>", ":bprevious<CR>", { silent = true })
-map("n", "<leader>bd", ":bdelete<CR>")
+map("n", "<leader>bd", ":bdelete<CR>", { desc = "Delete buffer" })
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
 map("v", "J", ":m '>+1<CR>gv=gv")
 map("v", "K", ":m '<-2<CR>gv=gv")
-map({ "n", "v" }, "<leader>y", '"+y')
+map({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
 map("t", "<Esc><Esc>", "<C-\\><C-n>")
+vim.api.nvim_create_autocmd("TermEnter", {
+    callback = function() vim.cmd("startinsert!") end,
+})
 
 -- Filetype settings
 vim.api.nvim_create_autocmd("FileType", {
@@ -246,7 +252,6 @@ vim.api.nvim_create_autocmd("FileType", {
     callback = function()
         vim.opt_local.tabstop = 4
         vim.opt_local.shiftwidth = 4
-        vim.opt_local.expandtab = true
     end,
 })
 

@@ -273,7 +273,6 @@
   "vim.highlightedyank.duration": 150,
   "vim.foldfix": true,
   "vim.easymotion": true,
-  "vim.sneak": false,
   "vim.surround": true,
 
   // -------------------------------------------------------------------------
@@ -285,12 +284,6 @@
   "terminal.integrated.scrollback": 10000,
   "terminal.integrated.defaultProfile.osx": "bash",
   "terminal.integrated.defaultProfile.linux": "bash",
-  "terminal.integrated.env.osx": {
-    "STARSHIP_CONFIG": "${env:HOME}/.config/starship.toml"
-  },
-  "terminal.integrated.env.linux": {
-    "STARSHIP_CONFIG": "${env:HOME}/.config/starship.toml"
-  },
 
   // -------------------------------------------------------------------------
   // Files
@@ -322,7 +315,6 @@
   // -------------------------------------------------------------------------
   "search.exclude": {
     "**/node_modules": true,
-    "**/bower_components": true,
     "**/.venv": true,
     "**/venv": true,
     "**/__pycache__": true,

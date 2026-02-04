@@ -2,8 +2,8 @@
 # Checkout default branch, pull, clean merged branches
 set -e
 
-branch=${1:-main}
-for b in main master; do git show-ref -q "refs/heads/$b" && branch=$b && break; done
+branch="${1:-}"
+[[ -z "$branch" ]] && for b in main master; do git show-ref -q "refs/heads/$b" && branch=$b && break; done
 
 git checkout "$branch"
 git pull

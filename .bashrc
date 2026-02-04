@@ -69,9 +69,6 @@ fi
 # Rust
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
-# Claude Code
-pathprepend "$HOME/.claude/bin"
-
 # --- Aliases ---
 
 # Navigation
@@ -158,7 +155,6 @@ __prompt_command() {
     local red='\[\e[0;31m\]'
     local green='\[\e[0;32m\]'
     local yellow='\[\e[0;33m\]'
-    local blue='\[\e[0;34m\]'
     local cyan='\[\e[0;36m\]'
     local reset='\[\e[0m\]'
     

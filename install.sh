@@ -35,7 +35,7 @@ install_deps() {
     elif [[ "$OS" == "linux" ]] && has apt-get; then
         sudo apt-get update -qq
         grep -q "neovim-ppa" /etc/apt/sources.list.d/* 2>/dev/null || { sudo add-apt-repository -y ppa:neovim-ppa/unstable; sudo apt-get update -qq; }
-        for pkg in neovim tmux fzf ripgrep fd-find xclip shellcheck; do
+        for pkg in neovim tmux fzf ripgrep fd-find xclip shellcheck shfmt; do
             dpkg -s "$pkg" &>/dev/null || sudo apt-get install -y "$pkg"
         done
     fi

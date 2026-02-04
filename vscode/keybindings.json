@@ -7,13 +7,6 @@
   // Navigation
   // -------------------------------------------------------------------------
   
-  // Quick open (Cmd/Ctrl+P already default, but ensure it works)
-  {
-    "key": "ctrl+p",
-    "command": "workbench.action.quickOpen",
-    "when": "!inQuickOpen"
-  },
-  
   // Go to symbol in file
   {
     "key": "ctrl+shift+o",

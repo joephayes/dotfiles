@@ -51,7 +51,7 @@ To backup existing configs first: `./cleanup.sh` then `./install.sh`
 - `<leader>ff` find files, `<leader>fg` grep, `<leader>fb` buffers
 - `<leader>e` file tree, `<leader>w` save, `<leader>q` quit
 - `gd` definition, `gr` references, `K` hover, `<leader>ca` code action
-- `<C-\>` terminal, `<leader>cc` Claude Code
+- `<leader>g` git (neogit), `<C-\>` terminal, `<leader>cc` Claude Code
 
 **tmux** (prefix = C-b):
 - `|` split vertical, `-` split horizontal
@@ -70,11 +70,8 @@ Works locally and over SSH (via OSC 52). Requires terminal support:
 1. Edit `~/.gitconfig` with your name/email
 2. Restart shell: `source ~/.bashrc`
 3. Open nvim - plugins auto-install
-4. In nvim, run `:Mason` to install LSP servers and tools:
-   - LSPs: `pyright`, `typescript-language-server`, `clojure-lsp`, `sqls`, `bash-language-server`
-   - Tools: `shfmt` (bash formatter), `ruff` (Python linter/formatter)
-5. In tmux: `prefix + I` to install TPM plugins
-6. VS Code: "Solarized Light" is built-in. If not working, run `Preferences: Color Theme` and select it.
+4. In tmux: `prefix + I` to install TPM plugins
+5. VS Code: "Solarized Light" is built-in. If not working, run `Preferences: Color Theme` and select it.
 
 ## Local overrides
 
