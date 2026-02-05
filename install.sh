@@ -43,7 +43,7 @@ install_deps() {
     has uv || curl -LsSf https://astral.sh/uv/install.sh | sh
     
     export NVM_DIR="$HOME/.nvm"
-    [[ -d "$NVM_DIR" ]] || curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    [[ -d "$NVM_DIR" ]] || curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 }
 
 install_symlinks() {

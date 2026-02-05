@@ -113,6 +113,7 @@ elif [[ -n "$DISPLAY" ]] && command -v xclip &>/dev/null; then
     alias paste='xclip -selection clipboard -o'
 else
     clip() { printf '\e]52;c;%s\a' "$(base64 | tr -d '\n')"; }
+    paste() { echo "paste: no clipboard tool available (install xclip)" >&2; }
 fi
 
 # --- Functions ---
@@ -180,7 +181,7 @@ __prompt_command() {
         git_info=" ${cyan}(${branch}${status})${reset}"
     fi
     
-    PS1="${indicator} \u@\h ${yellow}\w${reset}${git_info}\n${reset}\$(date +%H:%M) \$ "
+    PS1="${indicator} \u@\h ${yellow}\w${reset}${git_info}\n${reset}\A \$ "
 }
 
 PROMPT_COMMAND="__prompt_command; history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"

@@ -133,7 +133,6 @@ require("lazy").setup({
         event = "VeryLazy",
         config = function()
             require("which-key").add({
-                { "<leader>g", group = "git" },
                 { "<leader>f", group = "find" },
                 { "<leader>b", group = "buffer" },
                 { "<leader>l", group = "lsp" },

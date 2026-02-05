@@ -1,10 +1,6 @@
-# =============================================================================
-# Global Git Ignore (.gitignore_global)
-# =============================================================================
+# Global .gitignore
 
-# -----------------------------------------------------------------------------
-# OS Generated
-# -----------------------------------------------------------------------------
+# OS
 .DS_Store
 .DS_Store?
 ._*
@@ -14,10 +10,7 @@ ehthumbs.db
 Thumbs.db
 Desktop.ini
 
-# -----------------------------------------------------------------------------
-# Editors & IDEs
-# -----------------------------------------------------------------------------
-# Vim
+# Editors
 *.swp
 *.swo
 *~
@@ -25,7 +18,6 @@ Desktop.ini
 Session.vim
 .vim/
 
-# VS Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -33,20 +25,15 @@ Session.vim
 !.vscode/extensions.json
 *.code-workspace
 
-# JetBrains IDEs
 .idea/
 *.iml
 *.iws
 *.ipr
 out/
 
-# Sublime Text
 *.sublime-workspace
 *.sublime-project
 
-# -----------------------------------------------------------------------------
-# Languages & Frameworks
-# -----------------------------------------------------------------------------
 # Python
 __pycache__/
 *.py[cod]
@@ -56,7 +43,6 @@ __pycache__/
 .venv/
 venv/
 ENV/
-.env
 *.egg-info/
 dist/
 build/
@@ -84,23 +70,17 @@ yarn-error.log*
 .nrepl-port
 .cpcache/
 target/
-*.jar
 
 # Java / JVM
 *.class
-*.log
 *.jar
 *.war
 *.nar
 *.ear
-*.zip
-*.tar.gz
-*.rar
 hs_err_pid*
 
 # Rust
 /target/
-Cargo.lock
 *.rs.bk
 
 # Go
@@ -109,12 +89,9 @@ Cargo.lock
 *.dll
 *.dylib
 *.test
-*.out
 go.work
 
-# -----------------------------------------------------------------------------
-# Build & Dependencies
-# -----------------------------------------------------------------------------
+# Build
 *.o
 *.a
 *.lib
@@ -122,11 +99,8 @@ go.work
 *.lock
 !package-lock.json
 !yarn.lock
-!Cargo.lock
 
-# -----------------------------------------------------------------------------
-# Environment & Secrets
-# -----------------------------------------------------------------------------
+# Secrets
 .env
 .env.local
 .env.*.local
@@ -135,18 +109,13 @@ go.work
 .secret*
 credentials.json
 
-# -----------------------------------------------------------------------------
 # Logs & Databases
-# -----------------------------------------------------------------------------
 *.log
-*.sql
 *.sqlite
 *.sqlite3
 *.db
 
-# -----------------------------------------------------------------------------
 # Misc
-# -----------------------------------------------------------------------------
 *.bak
 *.backup
 *.tmp

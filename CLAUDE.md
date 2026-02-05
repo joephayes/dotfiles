@@ -56,7 +56,7 @@ Single file, top-to-bottom:
 
 Leader is `<Space>`, local leader is `,` (used by Conjure for Clojure).
 
-## Indentation rules (enforced by shfmt and the nvim config)
+## Indentation rules
 
 | Filetype | Indent |
 |----------|--------|
