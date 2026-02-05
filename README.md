@@ -1,23 +1,79 @@
-# Joe's dotfiles
+# Dotfiles
 
-## Installation
+Cross-platform dotfiles for macOS and Linux. Solarized Light theme.
 
-```bash
-cd ~
-git clone https://github.com/joephayes/dotfiles.git && cd dotfiles && ./bootstrap.sh
-```
-### Notes for Windows
-On Windows, I use the Git Bash that is part of
-[Git Extensions](http://sourceforge.net/projects/gitextensions/). So that
-[bootstrap.sh](bootstrap.sh) can create symbolic links correctly, make sure you
-run [Git Bash as an Administrator](http://technet.microsoft.com/en-us/magazine/ff431742.aspx).
-Otherwise you will get errors similar to
-
-> You do not have sufficient privilege to perform this operation.
-
-## Updating
+## Install
 
 ```bash
+git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-./bootstrap.sh
+./install.sh
 ```
+
+To backup existing configs first: `./cleanup.sh` then `./install.sh`
+
+## What's included
+
+| File | Purpose |
+|------|---------|
+| `.bashrc` | Shell config with git-aware prompt, aliases for git, python, node, postgres |
+| `.tmux.conf` | tmux with vim-style navigation, Solarized theme |
+| `nvim/init.lua` | Neovim 0.11+ with native LSP, Telescope, Treesitter |
+| `.gitconfig` | Git defaults (edit name/email after install) |
+| `.psqlrc` | PostgreSQL client settings |
+| `vscode/` | VS Code settings, keybindings, extensions list |
+
+## Language Support
+
+**Python** - LSP via pyright, managed with uv:
+- `mkvenv` - create .venv and activate
+- `venv` - activate existing .venv
+- `uvr` - uv run, `uvs` - uv sync, `uva` - uv add
+- `uvpy` - uv python (install/manage Python versions)
+
+**Node.js** - LSP via ts_ls, managed with nvm:
+- `nvm install --lts` - install latest LTS
+- `nvm use <version>` - switch versions
+
+**Clojure** - LSP via clojure_lsp, REPL via Conjure:
+- `,ee` - eval expression, `,eb` - eval buffer
+- `,lv` - show log buffer
+
+**Bash** - LSP via bashls, linting via shellcheck, formatting via shfmt:
+- `<leader>lf` - format buffer
+- Shellcheck diagnostics appear inline
+- 4-space indentation by default
+
+**SQL** - LSP via sqls, syntax via treesitter
+
+## Key bindings
+
+**Neovim** (leader = space):
+- `<leader>ff` find files, `<leader>fg` grep, `<leader>fb` buffers
+- `<leader>e` file tree, `<leader>w` save, `<leader>q` quit
+- `gd` definition, `gr` references, `K` hover, `<leader>ca` code action
+- `<leader>g` git (neogit), `<C-\>` terminal, `<leader>cc` Claude Code
+
+**tmux** (prefix = C-b):
+- `|` split vertical, `-` split horizontal
+- `C-h/j/k/l` navigate panes (works with vim)
+- `prefix + r` reload config
+- `prefix + I` install TPM plugins (run once after install)
+
+## Clipboard
+
+Works locally and over SSH (via OSC 52). Requires terminal support:
+- ✓ iTerm2, Alacritty, Kitty, WezTerm
+- ✗ Terminal.app
+
+## Post-install
+
+1. Edit `~/.gitconfig` with your name/email
+2. Restart shell: `source ~/.bashrc`
+3. Open nvim - plugins auto-install
+4. In tmux: `prefix + I` to install TPM plugins
+5. VS Code (optional): `./vscode-setup.sh` — symlinks settings and installs extensions
+
+## Local overrides
+
+Machine-specific settings go in `~/.bashrc.local`

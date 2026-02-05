@@ -1,0 +1,38 @@
+# VS Code Extensions
+# Install all: grep -v '^#' extensions.txt | grep -v '^$' | xargs -L 1 code --install-extension
+
+# Vim
+vscodevim.vim
+
+# Theme
+ryanolsonx.solarized
+
+# Languages
+ms-python.python
+ms-python.vscode-pylance
+charliermarsh.ruff
+esbenp.prettier-vscode
+dbaeumer.vscode-eslint
+betterthantomorrow.calva
+foxundermoon.shell-format
+timonwong.shellcheck
+
+# Git
+eamodio.gitlens
+mhutchie.git-graph
+
+# Productivity
+christian-kohler.path-intellisense
+streetsidesoftware.code-spell-checker
+usernamehw.errorlens
+gruntfuggly.todo-tree
+
+# Remote Development (for SSH/containers)
+ms-vscode-remote.remote-ssh
+ms-vscode-remote.remote-containers
+ms-vscode.remote-explorer
+
+# File support
+redhat.vscode-yaml
+tamasfe.even-better-toml
+DavidAnson.vscode-markdownlint

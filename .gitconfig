@@ -1,0 +1,48 @@
+# ~/.gitconfig
+
+[user]
+    name = Your Name
+    email = you@example.com
+
+[core]
+    editor = nvim
+    excludesfile = ~/.gitignore_global
+    pager = less -FRX
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = true
+
+[push]
+    default = current
+    autoSetupRemote = true
+
+[fetch]
+    prune = true
+
+[merge]
+    conflictstyle = diff3
+
+[rebase]
+    autoStash = true
+
+[diff]
+    colorMoved = default
+
+[alias]
+    s = status -sb
+    lg = log --graph --oneline --decorate -20
+    d = diff
+    ds = diff --staged
+    co = checkout
+    br = branch
+    st = stash
+    stp = stash pop
+    last = log -1 HEAD --stat
+    undo = reset --soft HEAD~1
+    today = "!git log --since=midnight --author=\"$(git config user.name)\" --oneline"
+
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
