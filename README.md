@@ -21,6 +21,7 @@ To backup existing configs first: `./cleanup.sh` then `./install.sh`
 | `nvim/init.lua` | Neovim 0.11+ with native LSP, Telescope, Treesitter |
 | `.gitconfig` | Git defaults (edit name/email after install) |
 | `.psqlrc` | PostgreSQL client settings |
+| `vscode/` | VS Code settings, keybindings, extensions list |
 
 ## Language Support
 
@@ -71,7 +72,7 @@ Works locally and over SSH (via OSC 52). Requires terminal support:
 2. Restart shell: `source ~/.bashrc`
 3. Open nvim - plugins auto-install
 4. In tmux: `prefix + I` to install TPM plugins
-5. VS Code: "Solarized Light" is built-in. If not working, run `Preferences: Color Theme` and select it.
+5. VS Code (optional): `./vscode-setup.sh` — symlinks settings and installs extensions
 
 ## Local overrides
 

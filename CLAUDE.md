@@ -27,7 +27,7 @@ tmux plugins require a one-time `prefix + I` (TPM install) after first launch.
 | `.bash_profile` | Login shell entry — inits Homebrew, sources `.bashrc`. |
 | `.tmux.conf` | tmux config with vim-style nav and vim-tmux-navigator integration. |
 | `nvim/init.lua` | Single-file Neovim config. Lazy.nvim plugin manager, native 0.11+ LSP, gitsigns + neogit for git. |
-| `vscode/` | Settings, keybindings, and an extensions list (`cat extensions.txt | xargs -L 1 code --install-extension`). |
+| `vscode/` | Settings and keybindings (symlinked by `vscode-setup.sh`). Extensions list in `extensions.txt`. |
 | `bin/git-nice` | Checkout default branch, pull, then run `git-branch-scrub`. Invoked as `git nice`. |
 | `bin/git-branch-scrub` | Prune remote refs, then delete all local branches merged into the default branch. Invoked as `git branch-scrub`. |
 | `.gitconfig` | Git config with rebase-first pull, auto-setup remotes, SSH-over-HTTPS for GitHub. |

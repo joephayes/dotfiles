@@ -1,5 +1,5 @@
 # VS Code Extensions
-# Install all with: cat extensions.txt | xargs -L 1 code --install-extension
+# Install all: grep -v '^#' extensions.txt | grep -v '^$' | xargs -L 1 code --install-extension
 
 # Vim
 vscodevim.vim
