@@ -29,7 +29,7 @@ install_deps() {
     
     if [[ "$OS" == "macos" ]]; then
         has brew || { /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"; }
-        for pkg in neovim tmux fzf ripgrep fd shellcheck shfmt; do
+        for pkg in neovim tmux fzf ripgrep fd shellcheck shfmt bash-git-prompt; do
             brew list "$pkg" &>/dev/null || brew install "$pkg"
         done
     elif [[ "$OS" == "linux" ]] && has apt-get; then
@@ -44,6 +44,10 @@ install_deps() {
     
     export NVM_DIR="$HOME/.nvm"
     [[ -d "$NVM_DIR" ]] || curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+
+    if [[ "$OS" == "linux" && ! -d "$HOME/.bash-git-prompt" ]]; then
+        git clone --depth 1 https://github.com/magicmonty/bash-git-prompt.git "$HOME/.bash-git-prompt"
+    fi
 }
 
 install_symlinks() {

@@ -147,44 +147,19 @@ if command -v fzf &>/dev/null; then
         . /usr/share/doc/fzf/examples/key-bindings.bash
 fi
 
-# --- Prompt ---
-# Style: [exit_status] user@host workdir [git_branch git_status]
-#        HH:MM $
+# --- Prompt (bash-git-prompt) ---
+GIT_PROMPT_ONLY_IN_REPO=1
+GIT_PROMPT_THEME=Solarized
+GIT_PROMPT_START="_LAST_COMMAND_INDICATOR_ \u@\h \w"
+GIT_PROMPT_END="\n\$(date +%H:%M) \$ "
 
-__prompt_command() {
-    local exit_code=$?
-    local red='\[\e[0;31m\]'
-    local green='\[\e[0;32m\]'
-    local yellow='\[\e[0;33m\]'
-    local cyan='\[\e[0;36m\]'
-    local reset='\[\e[0m\]'
-    
-    # Exit status indicator
-    local indicator
-    if [[ $exit_code -eq 0 ]]; then
-        indicator="${green}✓${reset}"
-    else
-        indicator="${red}✗${reset}"
-    fi
-    
-    # Git info
-    local git_info=""
-    if git rev-parse --git-dir &>/dev/null; then
-        local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-        local status=""
-        
-        # Check for changes
-        git diff --quiet 2>/dev/null || status+="*"
-        git diff --cached --quiet 2>/dev/null || status+="+"
-        [[ -n $(git ls-files --others --exclude-standard 2>/dev/null) ]] && status+="?"
-        
-        git_info=" ${cyan}(${branch}${status})${reset}"
-    fi
-    
-    PS1="${indicator} \u@\h ${yellow}\w${reset}${git_info}\n${reset}\A \$ "
-}
+PROMPT_COMMAND="history -a"
 
-PROMPT_COMMAND="__prompt_command; history -a${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+if [[ "$OS" == "macos" && -f "$BREW_PREFIX/opt/bash-git-prompt/share/gitprompt.sh" ]]; then
+    . "$BREW_PREFIX/opt/bash-git-prompt/share/gitprompt.sh"
+elif [[ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]]; then
+    . "$HOME/.bash-git-prompt/gitprompt.sh"
+fi
 
 # --- Completions ---
 [[ -f /usr/share/bash-completion/bash_completion ]] && . /usr/share/bash-completion/bash_completion

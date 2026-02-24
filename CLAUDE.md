@@ -103,7 +103,7 @@ Every managed file is a symlink back into this repo. If you add a new config fil
 
 ## Known decisions
 
-- No starship — using a custom bash prompt instead
+- No starship — using bash-git-prompt (magicmonty) with Solarized theme
 - `uv` preferred over `pip`/`venv` for Python
 - `nvm` for Node version management
 - Neovim 0.11+ required (uses native `vim.lsp.config` API)

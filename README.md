@@ -17,7 +17,7 @@ cd ~/dotfiles
 
 | File | Purpose |
 |------|---------|
-| `.bashrc` | Shell config with git-aware prompt, aliases for git, python, node, postgres |
+| `.bashrc` | Shell config with bash-git-prompt, aliases for git, python, node, postgres |
 | `.tmux.conf` | tmux with vim-style navigation, Solarized theme |
 | `nvim/init.lua` | Neovim 0.11+ with native LSP, Telescope, Treesitter |
 | `.gitconfig` | Git defaults — identity loaded from `~/.gitconfig.local` (created on install) |
