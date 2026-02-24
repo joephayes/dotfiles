@@ -56,7 +56,14 @@ install_symlinks() {
     link "$DOTFILES/.gitignore_global" ~/.gitignore_global
     link "$DOTFILES/.psqlrc" ~/.psqlrc
     link "$DOTFILES/nvim/init.lua" ~/.config/nvim/init.lua
-    
+
+    if [[ ! -f "$HOME/.gitconfig.local" ]]; then
+        cp "$DOTFILES/gitconfig.local" "$HOME/.gitconfig.local"
+        warn "Created ~/.gitconfig.local — edit it to set your name and email"
+    else
+        ok "~/.gitconfig.local already exists, skipping"
+    fi
+
     mkdir -p ~/bin
     for f in "$DOTFILES/bin/"*; do [[ -f "$f" ]] && link "$f" ~/bin/"$(basename "$f")"; done
     chmod +x ~/bin/* 2>/dev/null || true

@@ -1,13 +1,17 @@
 # ~/.gitconfig
 
-[user]
-    name = Your Name
-    email = you@example.com
+[include]
+    path = ~/.gitconfig.local
 
 [core]
     editor = nvim
     excludesfile = ~/.gitignore_global
     pager = less -FRX
+    whitespace = fix,space-before-tab,tab-in-indent,trailing-space
+    autocrlf = false
+
+[apply]
+    whitespace = fix
 
 [init]
     defaultBranch = main
@@ -23,13 +27,17 @@
     prune = true
 
 [merge]
-    conflictstyle = diff3
+    conflictstyle = zdiff3
+    log = true
 
 [rebase]
     autoStash = true
 
 [diff]
     colorMoved = default
+
+[grep]
+    lineNumber = true
 
 [alias]
     s = status -sb

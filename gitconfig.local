@@ -1,0 +1,4 @@
+# ~/.gitconfig.local — machine-specific overrides, not committed to dotfiles
+[user]
+    name = John Doe
+    email = john.doe@example.com

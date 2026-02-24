@@ -20,7 +20,7 @@ cd ~/dotfiles
 | `.bashrc` | Shell config with git-aware prompt, aliases for git, python, node, postgres |
 | `.tmux.conf` | tmux with vim-style navigation, Solarized theme |
 | `nvim/init.lua` | Neovim 0.11+ with native LSP, Telescope, Treesitter |
-| `.gitconfig` | Git defaults (edit name/email after install) |
+| `.gitconfig` | Git defaults — identity loaded from `~/.gitconfig.local` (created on install) |
 | `.psqlrc` | PostgreSQL client settings |
 | `vscode/` | VS Code settings, keybindings, extensions list |
 | `bin/git-nice` | `git nice` — checkout default branch, pull, scrub merged branches |
@@ -53,7 +53,7 @@ LSP servers auto-install via mason-lspconfig on first Neovim launch.
 
 ## Post-install
 
-1. Edit `~/.gitconfig` with your name/email
+1. Edit `~/.gitconfig.local` with your name/email (created automatically by `install.sh`)
 2. `source ~/.bashrc`
 3. Open nvim — LSPs install automatically
 4. In tmux: `prefix + I` for TPM plugins
