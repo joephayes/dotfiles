@@ -4,7 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A cross-platform dotfiles repository for macOS and Linux. All config files are symlinked into place by `install.sh`. The consistent theme across all editors and the shell is Solarized Light.
+A cross-platform dotfiles repository for macOS (Intel/Apple Silicon) and Linux. All config files are symlinked into place by `install.sh`. The consistent theme across all editors and the shell is Solarized Light.
+
+## Languages supported
+
+- Python (pyright LSP, ruff linting, uv for venvs/packages)
+- Node.js/JS/TS (ts_ls LSP, nvm for versions)
+- Clojure (clojure_lsp, Conjure REPL)
+- SQL (sqls LSP, treesitter)
+- Bash (bashls LSP, shellcheck linting, shfmt formatting)
 
 ## Installation and setup
 
@@ -18,6 +26,14 @@ A cross-platform dotfiles repository for macOS and Linux. All config files are s
 LSP servers are auto-installed by mason-lspconfig on first launch (`pyright`, `ruff`, `ts_ls`, `clojure_lsp`, `bashls`, `sqls`, `lua_ls`).
 
 tmux plugins require a one-time `prefix + I` (TPM install) after first launch.
+
+### Post-install steps
+
+1. `./install.sh`
+2. Edit `~/.gitconfig` name/email
+3. `source ~/.bashrc`
+4. Open nvim — LSPs install automatically via mason-lspconfig on first launch
+5. tmux: `prefix + I` for TPM plugins
 
 ## Repository structure
 
@@ -56,6 +72,15 @@ Single file, top-to-bottom:
 
 Leader is `<Space>`, local leader is `,` (used by Conjure for Clojure).
 
+### Key keybindings
+
+| Key | Action |
+|-----|--------|
+| `<leader>cc` | Claude Code terminal |
+| `<leader>lf` | Format buffer |
+| `<leader>ff/fg/fb` | Telescope find files/grep/buffers |
+| `gd/gr/K` | Definition/references/hover |
+
 ## Indentation rules
 
 | Filetype | Indent |
@@ -75,3 +100,11 @@ Both the shell and Neovim fall back to OSC 52 sequences when running over SSH. T
 ## What install.sh symlinks
 
 Every managed file is a symlink back into this repo. If you add a new config file here, add a corresponding `link` call in `install_symlinks()` in `install.sh`, and a `backup` call in `cleanup.sh`.
+
+## Known decisions
+
+- No starship — using a custom bash prompt instead
+- `uv` preferred over `pip`/`venv` for Python
+- `nvm` for Node version management
+- Neovim 0.11+ required (uses native `vim.lsp.config` API)
+- TPM for tmux plugins (`prefix + I` to install)

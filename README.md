@@ -1,16 +1,17 @@
 # Dotfiles
 
-Cross-platform dotfiles for macOS and Linux. Solarized Light theme.
+Cross-platform dotfiles for macOS (Intel/Apple Silicon) and Linux. Solarized Light theme everywhere.
 
 ## Install
 
 ```bash
 git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-./install.sh
+./cleanup.sh      # backup existing configs first (optional)
+./install.sh      # deps + symlinks + plugin bootstrap
 ```
 
-To backup existing configs first: `./cleanup.sh` then `./install.sh`
+`./install.sh --skip-deps` to skip dependency installation.
 
 ## What's included
 
@@ -22,58 +23,46 @@ To backup existing configs first: `./cleanup.sh` then `./install.sh`
 | `.gitconfig` | Git defaults (edit name/email after install) |
 | `.psqlrc` | PostgreSQL client settings |
 | `vscode/` | VS Code settings, keybindings, extensions list |
+| `bin/git-nice` | `git nice` — checkout default branch, pull, scrub merged branches |
+| `bin/git-branch-scrub` | `git branch-scrub` — prune remotes, delete merged local branches |
 
-## Language Support
+## Language support
 
-**Python** - LSP via pyright, managed with uv:
-- `mkvenv` - create .venv and activate
-- `venv` - activate existing .venv
-- `uvr` - uv run, `uvs` - uv sync, `uva` - uv add
-- `uvpy` - uv python (install/manage Python versions)
+| Language | LSP | Tooling |
+|----------|-----|---------|
+| Python | pyright, ruff | uv |
+| Node.js/TS | ts_ls | nvm |
+| Clojure | clojure_lsp | Conjure REPL |
+| SQL | sqls | treesitter |
+| Bash | bashls | shellcheck, shfmt |
 
-**Node.js** - LSP via ts_ls, managed with nvm:
-- `nvm install --lts` - install latest LTS
-- `nvm use <version>` - switch versions
-
-**Clojure** - LSP via clojure_lsp, REPL via Conjure:
-- `,ee` - eval expression, `,eb` - eval buffer
-- `,lv` - show log buffer
-
-**Bash** - LSP via bashls, linting via shellcheck, formatting via shfmt:
-- `<leader>lf` - format buffer
-- Shellcheck diagnostics appear inline
-- 4-space indentation by default
-
-**SQL** - LSP via sqls, syntax via treesitter
+LSP servers auto-install via mason-lspconfig on first Neovim launch.
 
 ## Key bindings
 
 **Neovim** (leader = space):
-- `<leader>ff` find files, `<leader>fg` grep, `<leader>fb` buffers
-- `<leader>e` file tree, `<leader>w` save, `<leader>q` quit
+- `<leader>ff/fg/fb` — find files / grep / buffers
+- `<leader>e` file tree, `<leader>g` git (neogit), `<leader>cc` Claude Code
+- `<leader>lf` format buffer
 - `gd` definition, `gr` references, `K` hover, `<leader>ca` code action
-- `<leader>g` git (neogit), `<C-\>` terminal, `<leader>cc` Claude Code
 
 **tmux** (prefix = C-b):
 - `|` split vertical, `-` split horizontal
-- `C-h/j/k/l` navigate panes (works with vim)
-- `prefix + r` reload config
-- `prefix + I` install TPM plugins (run once after install)
-
-## Clipboard
-
-Works locally and over SSH (via OSC 52). Requires terminal support:
-- ✓ iTerm2, Alacritty, Kitty, WezTerm
-- ✗ Terminal.app
+- `C-h/j/k/l` navigate panes (works seamlessly with vim)
+- `prefix + I` install TPM plugins (once after install)
 
 ## Post-install
 
 1. Edit `~/.gitconfig` with your name/email
-2. Restart shell: `source ~/.bashrc`
-3. Open nvim - plugins auto-install
-4. In tmux: `prefix + I` to install TPM plugins
-5. VS Code (optional): `./vscode-setup.sh` — symlinks settings and installs extensions
+2. `source ~/.bashrc`
+3. Open nvim — LSPs install automatically
+4. In tmux: `prefix + I` for TPM plugins
+5. VS Code (optional): `./vscode-setup.sh`
 
 ## Local overrides
 
-Machine-specific settings go in `~/.bashrc.local`
+Machine-specific config goes in `~/.bashrc.local` — never edit `.bashrc` directly.
+
+## Clipboard over SSH
+
+OSC 52 sequences work in iTerm2, Alacritty, Kitty, and WezTerm. Not supported in Terminal.app.
