@@ -1,5 +1,5 @@
 -- Neovim config - Solarized Light
--- LSP: Python (pyright), Node.js/JS/TS (ts_ls), Clojure (clojure_lsp), SQL (sqls), Bash
+-- LSP: Python (pyright), Node.js/JS/TS (ts_ls), Clojure (clojure_lsp), SQL (sqls), Bash, Go (gopls)
 -- Requires nvim 0.11+
 
 vim.g.mapleader = " "
@@ -81,7 +81,7 @@ require("lazy").setup({
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         opts = {
-            ensure_installed = { "python", "javascript", "typescript", "json", "clojure", "bash", "lua", "vim", "vimdoc", "html", "css", "yaml", "markdown", "sql" },
+            ensure_installed = { "python", "javascript", "typescript", "json", "clojure", "bash", "lua", "vim", "vimdoc", "html", "css", "yaml", "markdown", "sql", "go" },
         },
         config = function()
             vim.treesitter.language.register("bash", "sh")
@@ -93,7 +93,7 @@ require("lazy").setup({
     {
         "williamboman/mason-lspconfig.nvim",
         opts = {
-            ensure_installed = { "pyright", "ruff", "ts_ls", "clojure_lsp", "bashls", "sqls", "lua_ls" },
+            ensure_installed = { "pyright", "ruff", "ts_ls", "clojure_lsp", "bashls", "sqls", "lua_ls", "gopls" },
         },
     },
 
@@ -138,6 +138,9 @@ require("lazy").setup({
                 { "<leader>l", group = "lsp" },
                 { "<leader>c", group = "code" },
                 { "<leader>r", group = "refactor" },
+                { "<leader>g", group = "go" },
+                { "<leader>t", group = "test" },
+                { "<leader>d", group = "debug" },
             })
         end,
     },
@@ -178,6 +181,103 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>cc", function() claude:toggle() end, { desc = "Toggle Claude Code" })
         end,
     },
+
+    -- Comprehensive Go support
+    {
+        "ray-x/go.nvim",
+        dependencies = {
+            "ray-x/guihua.lua",
+            "neovim/nvim-lspconfig",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        event = {"CmdlineEnter"},
+        ft = {"go", 'gomod'},
+        build = ':lua require("go.install").update_all_sync()',
+        config = function()
+            require("go").setup({
+                -- Disable LSP (use your existing gopls config)
+                lsp_cfg = false,
+                lsp_gofumpt = true,
+                lsp_on_attach = false,
+
+                -- Test settings
+                test_runner = "go",
+                test_template = "",
+                test_template_dir = "",
+
+                -- DAP settings
+                dap_debug = true,
+                dap_debug_gui = true,
+                dap_debug_keymap = true,
+
+                -- Other features
+                trouble = false, -- disable trouble integration for now
+                luasnip = true,
+            })
+        end,
+    },
+
+    -- Testing framework
+    {
+        "nvim-neotest/neotest",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "antoinemadec/FixCursorHold.nvim",
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-neotest/neotest-go",
+        },
+        config = function()
+            require("neotest").setup({
+                adapters = {
+                    require("neotest-go")({
+                        experimental = {
+                            test_table = true,
+                        },
+                        args = { "-count=1", "-timeout=60s", "-race" }
+                    })
+                }
+            })
+        end,
+    },
+
+    -- Debug Adapter Protocol for Go
+    {
+        "mfussenegger/nvim-dap",
+        dependencies = {
+            "rcarriga/nvim-dap-ui",
+            "nvim-neotest/nvim-nio",
+            "theHamsta/nvim-dap-virtual-text",
+            "leoluz/nvim-dap-go",
+        },
+        config = function()
+            require("dap-go").setup({
+                delve = {
+                    path = "dlv",
+                    initialize_timeout_sec = 20,
+                    port = "${port}",
+                    build_flags = {},
+                    detached = vim.fn.has("win32") == 0,
+                },
+                tests = {
+                    verbose = false,
+                },
+            })
+
+            require("dapui").setup()
+            require("nvim-dap-virtual-text").setup()
+
+            local dap, dapui = require("dap"), require("dapui")
+            dap.listeners.after.event_initialized["dapui_config"] = function()
+                dapui.open()
+            end
+            dap.listeners.before.event_terminated["dapui_config"] = function()
+                dapui.close()
+            end
+            dap.listeners.before.event_exited["dapui_config"] = function()
+                dapui.close()
+            end
+        end,
+    },
 }, { checker = { enabled = false }, change_detection = { notify = false } })
 
 -- LSP Setup (native nvim 0.11+ API)
@@ -213,7 +313,56 @@ if vim.lsp.config then
         capabilities = caps,
         settings = { Lua = { diagnostics = { globals = { "vim" } }, workspace = { checkThirdParty = false } } },
     })
-    vim.lsp.enable({ "pyright", "ruff", "ts_ls", "clojure_lsp", "bashls", "sqls", "lua_ls" })
+    vim.lsp.config("gopls", {
+        capabilities = caps,
+        settings = {
+            gopls = {
+                -- Import management
+                gofumpt = true,
+
+                -- Code lenses (enables clickable actions)
+                codelenses = {
+                    generate = true,
+                    regenerate_cgo = true,
+                    run_govulncheck = true,
+                    tidy = true,
+                    upgrade_dependency = true,
+                    vendor = true,
+                },
+
+                -- Enhanced analysis
+                staticcheck = true,
+                vulncheck = "Imports",
+                analysisProgressReporting = true,
+
+                -- Completion enhancements
+                completeFunctionCalls = true,
+                usePlaceholders = true,
+                experimentalPostfixCompletions = true,
+
+                -- Documentation
+                hoverKind = "FullDocumentation",
+                linkTarget = "pkg.go.dev",
+                linksInHover = true,
+
+                -- Performance
+                directoryFilters = {"-**/node_modules", "-**/vendor"},
+
+                -- Experimental features
+                semanticTokens = true,
+                hints = {
+                    assignVariableTypes = true,
+                    compositeLiteralFields = true,
+                    compositeLiteralTypes = true,
+                    constantValues = true,
+                    functionTypeParameters = true,
+                    parameterNames = true,
+                    rangeVariableTypes = true,
+                },
+            },
+        },
+    })
+    vim.lsp.enable({ "pyright", "ruff", "ts_ls", "clojure_lsp", "bashls", "sqls", "lua_ls", "gopls" })
 end
 
 -- Keymaps
@@ -240,6 +389,38 @@ vim.api.nvim_create_autocmd("TermEnter", {
     callback = function() vim.cmd("startinsert!") end,
 })
 
+-- Go-specific keybindings
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "go",
+    callback = function()
+        local opts = { buffer = true, silent = true }
+
+        -- go.nvim keybindings
+        map("n", "<leader>gj", ":GoTagAdd json<CR>", vim.tbl_extend("force", opts, { desc = "Add json tags" }))
+        map("n", "<leader>gy", ":GoTagAdd yaml<CR>", vim.tbl_extend("force", opts, { desc = "Add yaml tags" }))
+        map("n", "<leader>gd", ":GoTagRm<CR>", vim.tbl_extend("force", opts, { desc = "Remove tags" }))
+        map("n", "<leader>gt", ":GoTest<CR>", vim.tbl_extend("force", opts, { desc = "Run tests" }))
+        map("n", "<leader>gT", ":GoTestFunc<CR>", vim.tbl_extend("force", opts, { desc = "Test function" }))
+        map("n", "<leader>gc", ":GoCoverage<CR>", vim.tbl_extend("force", opts, { desc = "Coverage" }))
+        map("n", "<leader>gi", ":GoImport ", vim.tbl_extend("force", opts, { desc = "Add import" }))
+        map("n", "<leader>gf", ":GoFillStruct<CR>", vim.tbl_extend("force", opts, { desc = "Fill struct" }))
+        map("n", "<leader>ge", ":GoIfErr<CR>", vim.tbl_extend("force", opts, { desc = "Add if err" }))
+
+        -- Testing with neotest
+        map("n", "<leader>tn", function() require("neotest").run.run() end, vim.tbl_extend("force", opts, { desc = "Run nearest test" }))
+        map("n", "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end, vim.tbl_extend("force", opts, { desc = "Run file tests" }))
+        map("n", "<leader>td", function() require("dap-go").debug_test() end, vim.tbl_extend("force", opts, { desc = "Debug test" }))
+        map("n", "<leader>tl", function() require("dap-go").debug_last_test() end, vim.tbl_extend("force", opts, { desc = "Debug last test" }))
+
+        -- Debugging
+        map("n", "<F5>", function() require("dap").continue() end, vim.tbl_extend("force", opts, { desc = "Continue" }))
+        map("n", "<F10>", function() require("dap").step_over() end, vim.tbl_extend("force", opts, { desc = "Step over" }))
+        map("n", "<F11>", function() require("dap").step_into() end, vim.tbl_extend("force", opts, { desc = "Step into" }))
+        map("n", "<F12>", function() require("dap").step_out() end, vim.tbl_extend("force", opts, { desc = "Step out" }))
+        map("n", "<leader>db", function() require("dap").toggle_breakpoint() end, vim.tbl_extend("force", opts, { desc = "Toggle breakpoint" }))
+    end,
+})
+
 -- Filetype settings
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "javascript", "typescript", "json", "yaml", "html", "css", "clojure" },
@@ -251,6 +432,15 @@ vim.api.nvim_create_autocmd("FileType", {
     callback = function()
         vim.opt_local.tabstop = 4
         vim.opt_local.shiftwidth = 4
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "go" },
+    callback = function()
+        vim.opt_local.tabstop = 4
+        vim.opt_local.shiftwidth = 4
+        vim.opt_local.expandtab = false -- Go uses actual tabs
     end,
 })
 

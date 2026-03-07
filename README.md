@@ -19,7 +19,7 @@ cd ~/dotfiles
 |------|---------|
 | `.bashrc` | Shell config with bash-git-prompt, aliases for git, python, node, postgres |
 | `.tmux.conf` | tmux with vim-style navigation, Solarized theme |
-| `nvim/init.lua` | Neovim 0.11+ with native LSP, Telescope, Treesitter |
+| `nvim/init.lua` | Neovim 0.11+ with native LSP, Telescope, Treesitter, Go debugging |
 | `.gitconfig` | Git defaults — identity loaded from `~/.gitconfig.local` (created on install) |
 | `.psqlrc` | PostgreSQL client settings |
 | `vscode/` | VS Code settings, keybindings, extensions list |
@@ -32,6 +32,7 @@ cd ~/dotfiles
 |----------|-----|---------|
 | Python | pyright, ruff | uv |
 | Node.js/TS | ts_ls | nvm |
+| Go | gopls | delve, gofumpt, golangci-lint |
 | Clojure | clojure_lsp | Conjure REPL |
 | SQL | sqls | treesitter |
 | Bash | bashls | shellcheck, shfmt |
@@ -45,6 +46,7 @@ LSP servers auto-install via mason-lspconfig on first Neovim launch.
 - `<leader>e` file tree, `<leader>g` git (neogit), `<leader>cc` Claude Code
 - `<leader>lf` format buffer
 - `gd` definition, `gr` references, `K` hover, `<leader>ca` code action
+- **Go**: `<leader>g*` Go tools, `<leader>t*` testing, `F5/F10/F11/F12` debugging
 
 **tmux** (prefix = C-b):
 - `|` split vertical, `-` split horizontal
@@ -58,6 +60,7 @@ LSP servers auto-install via mason-lspconfig on first Neovim launch.
 3. Open nvim — LSPs install automatically
 4. In tmux: `prefix + I` for TPM plugins
 5. VS Code (optional): `./vscode-setup.sh`
+6. For Go: Install Go first, then re-run `./install.sh` to get Go development tools
 
 ## Local overrides
 

@@ -2,7 +2,7 @@
 # Delete local branches merged into default branch
 set -e
 
-git remote prune origin -v
+git remote prune origin
 
 current=$(git branch --show-current)
 default=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')

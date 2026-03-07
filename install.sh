@@ -26,7 +26,7 @@ esac
 
 install_deps() {
     log "Installing dependencies..."
-    
+
     if [[ "$OS" == "macos" ]]; then
         has brew || { /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"; }
         for pkg in neovim tmux fzf ripgrep fd shellcheck shfmt bash-git-prompt; do
@@ -39,9 +39,9 @@ install_deps() {
             dpkg -s "$pkg" &>/dev/null || sudo apt-get install -y "$pkg"
         done
     fi
-    
+
     has uv || curl -LsSf https://astral.sh/uv/install.sh | sh
-    
+
     export NVM_DIR="$HOME/.nvm"
     [[ -d "$NVM_DIR" ]] || curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
@@ -77,6 +77,44 @@ setup() {
     mkdir -p ~/.local/share/nvim/undo
     has nvim && { log "Installing nvim plugins..."; nvim --headless "+Lazy! sync" +qa 2>/dev/null || true; }
     [[ -d ~/.tmux/plugins/tpm ]] || git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+    # Install Go development tools if Go is available
+    if has go; then
+        install_go_tools
+    else
+        warn "Go not found. Go development tools skipped."
+        warn "Install Go and re-run this script to get Go tooling."
+    fi
+}
+
+install_go_tools() {
+    log "Installing Go development tools..."
+
+    # Core debugging
+    go install github.com/go-delve/delve/cmd/dlv@latest && ok "delve debugger"
+
+    # Enhanced formatting (gofumpt)
+    go install mvdan.cc/gofumpt@latest && ok "gofumpt"
+
+    # Struct tag management
+    go install github.com/fatih/gomodifytags@latest && ok "gomodifytags"
+
+    # Test generation
+    go install github.com/cweill/gotests/gotests@latest && ok "gotests"
+
+    # Comprehensive linting
+    go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest && ok "golangci-lint"
+
+    # Vulnerability scanning
+    go install golang.org/x/vuln/cmd/govulncheck@latest && ok "govulncheck"
+
+    # Import management
+    go install golang.org/x/tools/cmd/goimports@latest && ok "goimports"
+
+    # Code generation helpers
+    go install github.com/josharian/impl@latest && ok "impl"
+
+    log "Go tools installation complete"
 }
 
 # Main
