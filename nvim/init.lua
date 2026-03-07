@@ -114,7 +114,7 @@ require("lazy").setup({
                         else fallback() end
                     end, { "i", "s" }),
                 }),
-                sources = cmp.config.sources({ { name = "nvim_lsp" }, { name = "luasnip" }, { name = "buffer" }, { name = "path" } }),
+                sources = cmp.config.sources({ { name = "copilot" }, { name = "nvim_lsp" }, { name = "luasnip" }, { name = "buffer" }, { name = "path" } }),
             })
         end,
     },
@@ -136,7 +136,7 @@ require("lazy").setup({
                 { "<leader>f", group = "find" },
                 { "<leader>b", group = "buffer" },
                 { "<leader>l", group = "lsp" },
-                { "<leader>c", group = "code" },
+                { "<leader>c", group = "claude" },
                 { "<leader>r", group = "refactor" },
                 { "<leader>g", group = "go" },
                 { "<leader>t", group = "test" },
@@ -150,13 +150,74 @@ require("lazy").setup({
     { "numToStr/Comment.nvim", opts = {} },
     { "kylechui/nvim-surround", event = "VeryLazy", opts = {} },
 
+    -- AI Code Completion
+    {
+        "zbirenbaum/copilot.lua",
+        cmd = "Copilot",
+        event = "InsertEnter",
+        config = function()
+            require("copilot").setup({
+                panel = {
+                    enabled = true,
+                    auto_refresh = false,
+                    keymap = {
+                        jump_prev = "[[",
+                        jump_next = "]]",
+                        accept = "<CR>",
+                        refresh = "gr",
+                        open = "<M-CR>"
+                    },
+                    layout = {
+                        position = "bottom", -- | top | left | right
+                        ratio = 0.4
+                    },
+                },
+                suggestion = {
+                    enabled = true,
+                    auto_trigger = false,  -- Set to false to prevent conflicts with nvim-cmp
+                    debounce = 75,
+                    keymap = {
+                        accept = "<M-l>",
+                        accept_word = false,
+                        accept_line = false,
+                        next = "<M-]>",
+                        prev = "<M-[>",
+                        dismiss = "<C-]>",
+                    },
+                },
+                filetypes = {
+                    yaml = false,
+                    markdown = false,
+                    help = false,
+                    gitcommit = false,
+                    gitrebase = false,
+                    hgcommit = false,
+                    svn = false,
+                    cvs = false,
+                    ["."] = false,
+                },
+                copilot_node_command = 'node', -- Node.js version must be > 16.x
+                server_opts_overrides = {},
+            })
+        end,
+    },
+
+    -- Copilot integration with nvim-cmp
+    {
+        "zbirenbaum/copilot-cmp",
+        dependencies = { "copilot.lua" },
+        config = function()
+            require("copilot_cmp").setup()
+        end,
+    },
+
     -- Clojure REPL
     { "Olical/conjure", ft = { "clojure" } },
 
     -- Tmux integration
     { "christoomey/vim-tmux-navigator", lazy = false },
 
-    -- Terminal (with Claude Code integration)
+    -- Terminal (with enhanced Claude Code integration)
     {
         "akinsho/toggleterm.nvim",
         lazy = false,
@@ -167,18 +228,75 @@ require("lazy").setup({
                 float_opts = { border = "curved", width = function() return math.floor(vim.o.columns * 0.85) end, height = function() return math.floor(vim.o.lines * 0.85) end },
             })
 
-            -- Claude Code terminal
+            -- Enhanced Claude Code terminal
             local Terminal = require("toggleterm.terminal").Terminal
             local claude = Terminal:new({
                 cmd = "claude",
                 hidden = true,
-                direction = "vertical",
-                on_open = function()
-                    vim.api.nvim_win_set_width(0, math.floor(vim.o.columns * 0.5))
+                direction = "float",
+                float_opts = {
+                    border = "curved",
+                    width = function() return math.floor(vim.o.columns * 0.9) end,
+                    height = function() return math.floor(vim.o.lines * 0.9) end,
+                    winblend = 3,
+                },
+                on_open = function(term)
+                    vim.cmd("startinsert!")
+                    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
+                end,
+                on_close = function(_)
                     vim.cmd("startinsert!")
                 end,
             })
-            vim.keymap.set("n", "<leader>cc", function() claude:toggle() end, { desc = "Toggle Claude Code" })
+
+            -- Claude with current buffer context
+            local claude_with_context = Terminal:new({
+                cmd = function()
+                    local filetype = vim.bo.filetype
+                    local filename = vim.fn.expand('%:t')
+                    return string.format('claude --context "Current file: %s (filetype: %s)"', filename, filetype)
+                end,
+                hidden = true,
+                direction = "float",
+                float_opts = {
+                    border = "curved",
+                    width = function() return math.floor(vim.o.columns * 0.9) end,
+                    height = function() return math.floor(vim.o.lines * 0.9) end,
+                    winblend = 3,
+                },
+                on_open = function(term)
+                    vim.cmd("startinsert!")
+                    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
+                end,
+            })
+
+            vim.keymap.set("n", "<leader>cc", function() claude:toggle() end, { desc = "Claude Code" })
+            vim.keymap.set("n", "<leader>cx", function() claude_with_context:toggle() end, { desc = "Claude with context" })
+
+            -- Send visual selection to Claude
+            vim.keymap.set("v", "<leader>cs", function()
+                local start_pos = vim.fn.getpos("'<")
+                local end_pos = vim.fn.getpos("'>")
+                local lines = vim.fn.getline(start_pos[2], end_pos[2])
+                local selection = table.concat(lines, "\n")
+                local filetype = vim.bo.filetype
+
+                local claude_selection = Terminal:new({
+                    cmd = string.format('claude --context "Code selection from %s file:\n%s"', filetype, selection),
+                    hidden = true,
+                    direction = "float",
+                    float_opts = {
+                        border = "curved",
+                        width = function() return math.floor(vim.o.columns * 0.9) end,
+                        height = function() return math.floor(vim.o.lines * 0.9) end,
+                    },
+                    on_open = function(term)
+                        vim.cmd("startinsert!")
+                        vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
+                    end,
+                })
+                claude_selection:toggle()
+            end, { desc = "Send selection to Claude" })
         end,
     },
 
@@ -226,6 +344,8 @@ require("lazy").setup({
             "nvim-treesitter/nvim-treesitter",
             "nvim-neotest/neotest-go",
         },
+        keys = { "<leader>tn", "<leader>tf", "<leader>td", "<leader>tl" },
+        ft = { "go" },
         config = function()
             require("neotest").setup({
                 adapters = {
@@ -249,6 +369,8 @@ require("lazy").setup({
             "theHamsta/nvim-dap-virtual-text",
             "leoluz/nvim-dap-go",
         },
+        keys = { "<F5>", "<F10>", "<F11>", "<F12>", "<leader>db" },
+        ft = { "go" },
         config = function()
             require("dap-go").setup({
                 delve = {
@@ -295,7 +417,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("gr", vim.lsp.buf.references, "References")
         map("K", vim.lsp.buf.hover, "Hover")
         map("<leader>rn", vim.lsp.buf.rename, "Rename")
-        map("<leader>ca", vim.lsp.buf.code_action, "Code action")
+        map("n", "<leader>la", vim.lsp.buf.code_action, "Code action")
         map("[d", vim.diagnostic.goto_prev, "Prev diagnostic")
         map("]d", vim.diagnostic.goto_next, "Next diagnostic")
     end,
@@ -371,7 +493,7 @@ map("n", "<Esc>", ":noh<CR>", { silent = true })
 map("n", "<leader>w", ":w<CR>", { desc = "Save" })
 map("n", "<leader>q", ":q<CR>", { desc = "Quit" })
 map("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "File tree" })
-map("n", "<leader>g", ":Neogit<CR>", { desc = "Neogit" })
+map("n", "<leader>G", ":Neogit<CR>", { desc = "Neogit" })
 map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Find files" })
 map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Grep" })
 map("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Buffers" })
@@ -379,6 +501,12 @@ map("n", "<leader>fr", ":Telescope oldfiles<CR>", { desc = "Recent files" })
 map("n", "<S-l>", ":bnext<CR>", { silent = true })
 map("n", "<S-h>", ":bprevious<CR>", { silent = true })
 map("n", "<leader>bd", ":bdelete<CR>", { desc = "Delete buffer" })
+
+-- AI/Copilot keybindings
+map("n", "<leader>co", ":Copilot panel<CR>", { desc = "Open Copilot panel" })
+map("n", "<leader>ce", ":Copilot enable<CR>", { desc = "Enable Copilot" })
+map("n", "<leader>cd", ":Copilot disable<CR>", { desc = "Disable Copilot" })
+map("n", "<leader>cs", ":Copilot status<CR>", { desc = "Copilot status" })
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
 map("v", "J", ":m '>+1<CR>gv=gv")
