@@ -138,7 +138,8 @@ require("lazy").setup({
                 { "<leader>l", group = "lsp" },
                 { "<leader>c", group = "claude" },
                 { "<leader>r", group = "refactor" },
-                { "<leader>g", group = "go" },
+                { "<leader>g", group = "git" },
+                { "<leader>o", group = "go" },
                 { "<leader>t", group = "test" },
                 { "<leader>d", group = "debug" },
             })
@@ -150,54 +151,23 @@ require("lazy").setup({
     { "numToStr/Comment.nvim", opts = {} },
     { "kylechui/nvim-surround", event = "VeryLazy", opts = {} },
 
-    -- AI Code Completion
+    -- AI Code Completion (via nvim-cmp only — inline suggestions disabled)
     {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
         event = "InsertEnter",
         config = function()
             require("copilot").setup({
-                panel = {
-                    enabled = true,
-                    auto_refresh = false,
-                    keymap = {
-                        jump_prev = "[[",
-                        jump_next = "]]",
-                        accept = "<CR>",
-                        refresh = "gr",
-                        open = "<M-CR>"
-                    },
-                    layout = {
-                        position = "bottom", -- | top | left | right
-                        ratio = 0.4
-                    },
-                },
-                suggestion = {
-                    enabled = true,
-                    auto_trigger = false,  -- Set to false to prevent conflicts with nvim-cmp
-                    debounce = 75,
-                    keymap = {
-                        accept = "<M-l>",
-                        accept_word = false,
-                        accept_line = false,
-                        next = "<M-]>",
-                        prev = "<M-[>",
-                        dismiss = "<C-]>",
-                    },
-                },
+                suggestion = { enabled = false },
+                panel = { enabled = false },
                 filetypes = {
                     yaml = false,
                     markdown = false,
                     help = false,
                     gitcommit = false,
                     gitrebase = false,
-                    hgcommit = false,
-                    svn = false,
-                    cvs = false,
                     ["."] = false,
                 },
-                copilot_node_command = 'node', -- Node.js version must be > 16.x
-                server_opts_overrides = {},
             })
         end,
     },
@@ -417,7 +387,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         map("gr", vim.lsp.buf.references, "References")
         map("K", vim.lsp.buf.hover, "Hover")
         map("<leader>rn", vim.lsp.buf.rename, "Rename")
-        map("n", "<leader>la", vim.lsp.buf.code_action, "Code action")
+        map("<leader>la", vim.lsp.buf.code_action, "Code action")
         map("[d", vim.diagnostic.goto_prev, "Prev diagnostic")
         map("]d", vim.diagnostic.goto_next, "Next diagnostic")
     end,
@@ -493,7 +463,7 @@ map("n", "<Esc>", ":noh<CR>", { silent = true })
 map("n", "<leader>w", ":w<CR>", { desc = "Save" })
 map("n", "<leader>q", ":q<CR>", { desc = "Quit" })
 map("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "File tree" })
-map("n", "<leader>G", ":Neogit<CR>", { desc = "Neogit" })
+map("n", "<leader>g", ":Neogit<CR>", { desc = "Neogit" })
 map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Find files" })
 map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Grep" })
 map("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Buffers" })
@@ -502,11 +472,6 @@ map("n", "<S-l>", ":bnext<CR>", { silent = true })
 map("n", "<S-h>", ":bprevious<CR>", { silent = true })
 map("n", "<leader>bd", ":bdelete<CR>", { desc = "Delete buffer" })
 
--- AI/Copilot keybindings
-map("n", "<leader>co", ":Copilot panel<CR>", { desc = "Open Copilot panel" })
-map("n", "<leader>ce", ":Copilot enable<CR>", { desc = "Enable Copilot" })
-map("n", "<leader>cd", ":Copilot disable<CR>", { desc = "Disable Copilot" })
-map("n", "<leader>cs", ":Copilot status<CR>", { desc = "Copilot status" })
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
 map("v", "J", ":m '>+1<CR>gv=gv")
@@ -524,15 +489,15 @@ vim.api.nvim_create_autocmd("FileType", {
         local opts = { buffer = true, silent = true }
 
         -- go.nvim keybindings
-        map("n", "<leader>gj", ":GoTagAdd json<CR>", vim.tbl_extend("force", opts, { desc = "Add json tags" }))
-        map("n", "<leader>gy", ":GoTagAdd yaml<CR>", vim.tbl_extend("force", opts, { desc = "Add yaml tags" }))
-        map("n", "<leader>gd", ":GoTagRm<CR>", vim.tbl_extend("force", opts, { desc = "Remove tags" }))
-        map("n", "<leader>gt", ":GoTest<CR>", vim.tbl_extend("force", opts, { desc = "Run tests" }))
-        map("n", "<leader>gT", ":GoTestFunc<CR>", vim.tbl_extend("force", opts, { desc = "Test function" }))
-        map("n", "<leader>gc", ":GoCoverage<CR>", vim.tbl_extend("force", opts, { desc = "Coverage" }))
-        map("n", "<leader>gi", ":GoImport ", vim.tbl_extend("force", opts, { desc = "Add import" }))
-        map("n", "<leader>gf", ":GoFillStruct<CR>", vim.tbl_extend("force", opts, { desc = "Fill struct" }))
-        map("n", "<leader>ge", ":GoIfErr<CR>", vim.tbl_extend("force", opts, { desc = "Add if err" }))
+        map("n", "<leader>oj", ":GoTagAdd json<CR>", vim.tbl_extend("force", opts, { desc = "Add json tags" }))
+        map("n", "<leader>oy", ":GoTagAdd yaml<CR>", vim.tbl_extend("force", opts, { desc = "Add yaml tags" }))
+        map("n", "<leader>od", ":GoTagRm<CR>", vim.tbl_extend("force", opts, { desc = "Remove tags" }))
+        map("n", "<leader>ot", ":GoTest<CR>", vim.tbl_extend("force", opts, { desc = "Run tests" }))
+        map("n", "<leader>oT", ":GoTestFunc<CR>", vim.tbl_extend("force", opts, { desc = "Test function" }))
+        map("n", "<leader>oc", ":GoCoverage<CR>", vim.tbl_extend("force", opts, { desc = "Coverage" }))
+        map("n", "<leader>oi", ":GoImport ", vim.tbl_extend("force", opts, { desc = "Add import" }))
+        map("n", "<leader>of", ":GoFillStruct<CR>", vim.tbl_extend("force", opts, { desc = "Fill struct" }))
+        map("n", "<leader>oe", ":GoIfErr<CR>", vim.tbl_extend("force", opts, { desc = "Add if err" }))
 
         -- Testing with neotest
         map("n", "<leader>tn", function() require("neotest").run.run() end, vim.tbl_extend("force", opts, { desc = "Run nearest test" }))
