@@ -187,17 +187,6 @@ require("lazy").setup({
     -- Tmux integration
     { "christoomey/vim-tmux-navigator", lazy = false },
 
-    -- Terminal
-    {
-        "akinsho/toggleterm.nvim",
-        lazy = false,
-        opts = {
-            open_mapping = [[<C-\>]],
-            direction = "float",
-            float_opts = { border = "curved", width = function() return math.floor(vim.o.columns * 0.85) end, height = function() return math.floor(vim.o.lines * 0.85) end },
-        },
-    },
-
     -- Comprehensive Go support
     {
         "ray-x/go.nvim",
@@ -224,7 +213,7 @@ require("lazy").setup({
                 -- DAP settings
                 dap_debug = true,
                 dap_debug_gui = true,
-                dap_debug_keymap = true,
+                dap_debug_keymap = false,
 
                 -- Other features
                 trouble = false, -- disable trouble integration for now
@@ -395,7 +384,15 @@ map("n", "<leader>g", ":Neogit<CR>", { desc = "Neogit" })
 -- Claude Code (tmux split — navigate back with C-h)
 map("n", "<leader>cc", function()
     local cwd = vim.fn.getcwd()
-    vim.fn.system("pane=$(tmux list-panes -F '#{pane_id} #{pane_current_command}' | awk '/claude/{print $1; exit}'); if [ -n \"$pane\" ]; then tmux select-pane -t \"$pane\"; else tmux split-window -h -l 90 -c '" .. cwd .. "' 'bash -li -c claude'; fi")
+    local pane = vim.fn.system("tmux list-panes -F '#{pane_id} #{pane_title}' | awk '$2==\"claude\"{print $1; exit}'"):gsub("\n", "")
+    if pane ~= "" then
+        vim.fn.system("tmux select-pane -t " .. pane)
+    else
+        local new = vim.fn.system(string.format(
+            "tmux split-window -h -l 90 -c '%s' -P -F '#{pane_id}' 'bash -li -c claude'", cwd
+        )):gsub("\n", "")
+        vim.fn.system("tmux select-pane -t " .. new .. " -T claude")
+    end
 end, { desc = "Claude Code" })
 map("n", "<leader>cx", function()
     local file = vim.fn.expand('%:p')
