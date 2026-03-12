@@ -104,7 +104,7 @@ Leader is `<Space>`, local leader is `,` (used by Conjure for Clojure).
 
 ## Clipboard over SSH
 
-Both the shell and Neovim fall back to OSC 52 sequences when running over SSH. This works in iTerm2, Alacritty, Kitty, and WezTerm but not in macOS Terminal.app.
+Both the shell and Neovim fall back to OSC 52 sequences when running over SSH. This works in Ghostty, iTerm2, Alacritty, Kitty, and WezTerm but not in macOS Terminal.app.
 
 ## What install.sh symlinks
 

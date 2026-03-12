@@ -68,4 +68,4 @@ Machine-specific config goes in `~/.bashrc.local` — never edit `.bashrc` direc
 
 ## Clipboard over SSH
 
-OSC 52 sequences work in iTerm2, Alacritty, Kitty, and WezTerm. Not supported in Terminal.app.
+OSC 52 sequences work in Ghostty, iTerm2, Alacritty, Kitty, and WezTerm. Not supported in Terminal.app.
