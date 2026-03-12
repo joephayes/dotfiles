@@ -48,6 +48,8 @@ install_deps() {
     if [[ "$OS" == "linux" && ! -d "$HOME/.bash-git-prompt" ]]; then
         git clone --depth 1 https://github.com/magicmonty/bash-git-prompt.git "$HOME/.bash-git-prompt"
     fi
+
+    has claude || { log "Installing Claude Code..."; curl -fsSL https://claude.ai/install.sh | bash; }
 }
 
 install_symlinks() {
