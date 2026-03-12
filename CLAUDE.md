@@ -65,7 +65,7 @@ tmux plugins require a one-time `prefix + I` (TPM install) after first launch.
 Single file, top-to-bottom:
 1. Options block
 2. Lazy.nvim bootstrap
-3. Plugin table (colorscheme first with `priority = 1000`, then status line, file tree, telescope, treesitter, mason, completion, git, editing helpers, conjure, tmux nav, toggleterm/Claude, go.nvim, neotest, nvim-dap)
+3. Plugin table (colorscheme first with `priority = 1000`, then status line, file tree, telescope, treesitter, mason, completion, git, editing helpers, conjure, tmux nav, toggleterm, go.nvim, neotest, nvim-dap)
 4. LSP setup using `vim.lsp.config` (native 0.11+ API) — pyright, ts_ls, clojure_lsp, bashls, sqls, lua_ls, gopls
 5. Global keymaps
 6. Filetype autocmds (2-space for JS/TS/JSON/YAML/HTML/CSS/Clojure; 4-space for bash; tabs for Go)
@@ -78,7 +78,10 @@ Leader is `<Space>`, local leader is `,` (used by Conjure for Clojure).
 
 | Key | Action |
 |-----|--------|
-| `<leader>cc` | Claude Code terminal |
+| `<leader>cc` | Claude Code (tmux split, `C-h` to return to nvim) |
+| `<leader>cx` | Claude with current file (`@file` reference) |
+| `<leader>cs` | Claude with visual selection (writes to tempfile) |
+| `Ctrl+B Ctrl+C` | Claude Code from anywhere in tmux |
 | `<leader>lf` | Format buffer |
 | `<leader>ff/fg/fb` | Telescope find files/grep/buffers |
 | `gd/gr/K` | Definition/references/hover |

@@ -187,87 +187,15 @@ require("lazy").setup({
     -- Tmux integration
     { "christoomey/vim-tmux-navigator", lazy = false },
 
-    -- Terminal (with enhanced Claude Code integration)
+    -- Terminal
     {
         "akinsho/toggleterm.nvim",
         lazy = false,
-        config = function()
-            require("toggleterm").setup({
-                open_mapping = [[<C-\>]],
-                direction = "float",
-                float_opts = { border = "curved", width = function() return math.floor(vim.o.columns * 0.85) end, height = function() return math.floor(vim.o.lines * 0.85) end },
-            })
-
-            -- Enhanced Claude Code terminal
-            local Terminal = require("toggleterm.terminal").Terminal
-            local claude = Terminal:new({
-                cmd = "claude",
-                hidden = true,
-                direction = "float",
-                float_opts = {
-                    border = "curved",
-                    width = function() return math.floor(vim.o.columns * 0.9) end,
-                    height = function() return math.floor(vim.o.lines * 0.9) end,
-                    winblend = 3,
-                },
-                on_open = function(term)
-                    vim.cmd("startinsert!")
-                    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
-                end,
-                on_close = function(_)
-                    vim.cmd("startinsert!")
-                end,
-            })
-
-            -- Claude with current buffer context
-            local claude_with_context = Terminal:new({
-                cmd = function()
-                    local filetype = vim.bo.filetype
-                    local filename = vim.fn.expand('%:t')
-                    return string.format('claude --context "Current file: %s (filetype: %s)"', filename, filetype)
-                end,
-                hidden = true,
-                direction = "float",
-                float_opts = {
-                    border = "curved",
-                    width = function() return math.floor(vim.o.columns * 0.9) end,
-                    height = function() return math.floor(vim.o.lines * 0.9) end,
-                    winblend = 3,
-                },
-                on_open = function(term)
-                    vim.cmd("startinsert!")
-                    vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
-                end,
-            })
-
-            vim.keymap.set("n", "<leader>cc", function() claude:toggle() end, { desc = "Claude Code" })
-            vim.keymap.set("n", "<leader>cx", function() claude_with_context:toggle() end, { desc = "Claude with context" })
-
-            -- Send visual selection to Claude
-            vim.keymap.set("v", "<leader>cs", function()
-                local start_pos = vim.fn.getpos("'<")
-                local end_pos = vim.fn.getpos("'>")
-                local lines = vim.fn.getline(start_pos[2], end_pos[2])
-                local selection = table.concat(lines, "\n")
-                local filetype = vim.bo.filetype
-
-                local claude_selection = Terminal:new({
-                    cmd = string.format('claude --context "Code selection from %s file:\n%s"', filetype, selection),
-                    hidden = true,
-                    direction = "float",
-                    float_opts = {
-                        border = "curved",
-                        width = function() return math.floor(vim.o.columns * 0.9) end,
-                        height = function() return math.floor(vim.o.lines * 0.9) end,
-                    },
-                    on_open = function(term)
-                        vim.cmd("startinsert!")
-                        vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
-                    end,
-                })
-                claude_selection:toggle()
-            end, { desc = "Send selection to Claude" })
-        end,
+        opts = {
+            open_mapping = [[<C-\>]],
+            direction = "float",
+            float_opts = { border = "curved", width = function() return math.floor(vim.o.columns * 0.85) end, height = function() return math.floor(vim.o.lines * 0.85) end },
+        },
     },
 
     -- Comprehensive Go support
@@ -464,9 +392,23 @@ map("n", "<leader>w", ":w<CR>", { desc = "Save" })
 map("n", "<leader>q", ":q<CR>", { desc = "Quit" })
 map("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "File tree" })
 map("n", "<leader>g", ":Neogit<CR>", { desc = "Neogit" })
+-- Claude Code (tmux split — navigate back with C-h)
 map("n", "<leader>cc", function()
-    vim.fn.system("tmux select-pane -t .+ 2>/dev/null || tmux split-window -h -l 90 -c '" .. vim.fn.getcwd() .. "' 'claude'")
+    vim.fn.system("tmux select-pane -t .+ 2>/dev/null || tmux split-window -h -l 90 -c '" .. vim.fn.getcwd() .. "' 'bash -li -c claude'")
 end, { desc = "Claude Code" })
+map("n", "<leader>cx", function()
+    local file = vim.fn.expand('%:p')
+    local cwd = vim.fn.getcwd()
+    vim.fn.system(string.format("tmux split-window -h -l 90 -c '%s' 'bash -li -c \"claude \\\"@%s\\\"\"'", cwd, file))
+end, { desc = "Claude with file" })
+map("v", "<leader>cs", function()
+    local lines = vim.fn.getline(vim.fn.line("'<"), vim.fn.line("'>"))
+    local ext = vim.fn.expand('%:e')
+    local tmp = vim.fn.tempname() .. (ext ~= '' and '.' .. ext or '.txt')
+    vim.fn.writefile(lines, tmp)
+    local cwd = vim.fn.getcwd()
+    vim.fn.system(string.format("tmux split-window -h -l 90 -c '%s' 'bash -li -c \"claude \\\"@%s\\\"\"'", cwd, tmp))
+end, { desc = "Claude with selection" })
 map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Find files" })
 map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Grep" })
 map("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Buffers" })
