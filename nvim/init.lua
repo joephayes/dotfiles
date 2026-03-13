@@ -5,6 +5,9 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+-- Telescope compat: ft_to_lang moved in nvim 0.10+
+vim.treesitter.ft_to_lang = vim.treesitter.language.ft_to_lang
+
 -- Options
 local o = vim.opt
 o.number, o.relativenumber = true, true
