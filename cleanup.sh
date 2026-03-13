@@ -66,6 +66,7 @@ backup ~/.gitconfig
 backup ~/.gitignore_global
 backup ~/.psqlrc
 backup ~/.config/nvim
+backup ~/.config/ghostty
 
 # VS Code (platform-specific path)
 if [[ "$(uname)" == "Darwin" ]]; then
