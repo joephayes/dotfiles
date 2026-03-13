@@ -5,9 +5,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
--- Telescope compat: ft_to_lang removed in nvim 0.11, replaced by get_lang
-vim.treesitter.ft_to_lang = vim.treesitter.language.get_lang
-
 -- Options
 local o = vim.opt
 o.number, o.relativenumber = true, true
@@ -74,7 +71,7 @@ require("lazy").setup({
         branch = "0.1.x",
         dependencies = { "nvim-lua/plenary.nvim", { "nvim-telescope/telescope-fzf-native.nvim", build = "make" } },
         config = function()
-            require("telescope").setup({ defaults = { file_ignore_patterns = { "node_modules", ".git/", "__pycache__", ".venv" } } })
+            require("telescope").setup({ defaults = { file_ignore_patterns = { "node_modules", ".git/", "__pycache__", ".venv" }, preview = { treesitter = false } } })
             pcall(require("telescope").load_extension, "fzf")
         end,
     },
@@ -86,9 +83,6 @@ require("lazy").setup({
         opts = {
             ensure_installed = { "python", "javascript", "typescript", "json", "clojure", "bash", "lua", "vim", "vimdoc", "html", "css", "yaml", "markdown", "sql", "go" },
         },
-        config = function()
-            vim.treesitter.language.register("bash", "sh")
-        end,
     },
 
     -- Mason (LSP/tool installer)
@@ -291,6 +285,8 @@ require("lazy").setup({
         end,
     },
 }, { checker = { enabled = false }, change_detection = { notify = false } })
+
+vim.treesitter.language.register("bash", "sh")
 
 -- LSP Setup (native nvim 0.11+ API)
 local caps = vim.lsp.protocol.make_client_capabilities()
