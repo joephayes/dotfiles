@@ -5,8 +5,8 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
--- Telescope compat: ft_to_lang moved in nvim 0.10+
-vim.treesitter.ft_to_lang = vim.treesitter.language.ft_to_lang
+-- Telescope compat: ft_to_lang removed in nvim 0.11, replaced by get_lang
+vim.treesitter.ft_to_lang = vim.treesitter.language.get_lang
 
 -- Options
 local o = vim.opt
