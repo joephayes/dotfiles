@@ -70,203 +70,203 @@
     "<C-w>": true,
     "<C-x>": false,
     "<C-y>": true,
-    "<C-z>": false
+    "<C-z>": false,
   },
   "vim.insertModeKeyBindings": [
     {
       "before": ["j", "k"],
-      "after": ["<Esc>"]
-    }
+      "after": ["<Esc>"],
+    },
   ],
   "vim.normalModeKeyBindingsNonRecursive": [
     // Clear search highlight
     {
       "before": ["<Esc>"],
-      "commands": [":nohlsearch"]
+      "commands": [":nohlsearch"],
     },
     // Save file
     {
       "before": ["<leader>", "w"],
-      "commands": [":w"]
+      "commands": [":w"],
     },
     // Close editor
     {
       "before": ["<leader>", "q"],
-      "commands": [":q"]
+      "commands": [":q"],
     },
     // File explorer
     {
       "before": ["<leader>", "e"],
-      "commands": ["workbench.view.explorer"]
+      "commands": ["workbench.view.explorer"],
     },
     // Toggle sidebar
     {
       "before": ["<leader>", "b"],
-      "commands": ["workbench.action.toggleSidebarVisibility"]
+      "commands": ["workbench.action.toggleSidebarVisibility"],
     },
     // Quick open (find files)
     {
       "before": ["<leader>", "f", "f"],
-      "commands": ["workbench.action.quickOpen"]
+      "commands": ["workbench.action.quickOpen"],
     },
     // Find in files (grep)
     {
       "before": ["<leader>", "f", "g"],
-      "commands": ["workbench.action.findInFiles"]
+      "commands": ["workbench.action.findInFiles"],
     },
     // Find symbol in workspace
     {
       "before": ["<leader>", "f", "s"],
-      "commands": ["workbench.action.showAllSymbols"]
+      "commands": ["workbench.action.showAllSymbols"],
     },
     // Go to definition
     {
       "before": ["g", "d"],
-      "commands": ["editor.action.revealDefinition"]
+      "commands": ["editor.action.revealDefinition"],
     },
     // Go to type definition
     {
       "before": ["g", "y"],
-      "commands": ["editor.action.goToTypeDefinition"]
+      "commands": ["editor.action.goToTypeDefinition"],
     },
     // Go to implementation
     {
       "before": ["g", "i"],
-      "commands": ["editor.action.goToImplementation"]
+      "commands": ["editor.action.goToImplementation"],
     },
     // Find references
     {
       "before": ["g", "r"],
-      "commands": ["editor.action.goToReferences"]
+      "commands": ["editor.action.goToReferences"],
     },
     // Hover (show documentation)
     {
       "before": ["K"],
-      "commands": ["editor.action.showHover"]
+      "commands": ["editor.action.showHover"],
     },
     // Rename symbol
     {
       "before": ["<leader>", "r", "n"],
-      "commands": ["editor.action.rename"]
+      "commands": ["editor.action.rename"],
     },
     // Code actions
     {
       "before": ["<leader>", "c", "a"],
-      "commands": ["editor.action.quickFix"]
+      "commands": ["editor.action.quickFix"],
     },
     // Format document
     {
       "before": ["<leader>", "l", "f"],
-      "commands": ["editor.action.formatDocument"]
+      "commands": ["editor.action.formatDocument"],
     },
     // Next/prev diagnostic
     {
       "before": ["]", "d"],
-      "commands": ["editor.action.marker.next"]
+      "commands": ["editor.action.marker.next"],
     },
     {
       "before": ["[", "d"],
-      "commands": ["editor.action.marker.prev"]
+      "commands": ["editor.action.marker.prev"],
     },
     // Split window vertical
     {
       "before": ["<leader>", "v"],
-      "commands": ["workbench.action.splitEditor"]
+      "commands": ["workbench.action.splitEditor"],
     },
     // Split window horizontal
     {
       "before": ["<leader>", "s"],
-      "commands": ["workbench.action.splitEditorDown"]
+      "commands": ["workbench.action.splitEditorDown"],
     },
     // Navigate splits (like vim-tmux-navigator)
     {
       "before": ["<C-h>"],
-      "commands": ["workbench.action.focusLeftGroup"]
+      "commands": ["workbench.action.focusLeftGroup"],
     },
     {
       "before": ["<C-j>"],
-      "commands": ["workbench.action.focusBelowGroup"]
+      "commands": ["workbench.action.focusBelowGroup"],
     },
     {
       "before": ["<C-k>"],
-      "commands": ["workbench.action.focusAboveGroup"]
+      "commands": ["workbench.action.focusAboveGroup"],
     },
     {
       "before": ["<C-l>"],
-      "commands": ["workbench.action.focusRightGroup"]
+      "commands": ["workbench.action.focusRightGroup"],
     },
     // Buffer navigation
     {
       "before": ["<S-h>"],
-      "commands": ["workbench.action.previousEditor"]
+      "commands": ["workbench.action.previousEditor"],
     },
     {
       "before": ["<S-l>"],
-      "commands": ["workbench.action.nextEditor"]
+      "commands": ["workbench.action.nextEditor"],
     },
     // Close buffer
     {
       "before": ["<leader>", "b", "d"],
-      "commands": ["workbench.action.closeActiveEditor"]
+      "commands": ["workbench.action.closeActiveEditor"],
     },
     // Terminal toggle
     {
       "before": ["<leader>", "t"],
-      "commands": ["workbench.action.terminal.toggleTerminal"]
+      "commands": ["workbench.action.terminal.toggleTerminal"],
     },
     // Git
     {
       "before": ["<leader>", "g", "s"],
-      "commands": ["workbench.view.scm"]
+      "commands": ["workbench.view.scm"],
     },
     {
       "before": ["<leader>", "g", "b"],
-      "commands": ["gitlens.toggleFileBlame"]
+      "commands": ["gitlens.toggleFileBlame"],
     },
     // Command palette
     {
       "before": ["<leader>", "p"],
-      "commands": ["workbench.action.showCommands"]
+      "commands": ["workbench.action.showCommands"],
     },
     // Center cursor
     {
       "before": ["<C-d>"],
-      "after": ["<C-d>", "z", "z"]
+      "after": ["<C-d>", "z", "z"],
     },
     {
       "before": ["<C-u>"],
-      "after": ["<C-u>", "z", "z"]
+      "after": ["<C-u>", "z", "z"],
     },
     {
       "before": ["n"],
-      "after": ["n", "z", "z", "z", "v"]
+      "after": ["n", "z", "z", "z", "v"],
     },
     {
       "before": ["N"],
-      "after": ["N", "z", "z", "z", "v"]
-    }
+      "after": ["N", "z", "z", "z", "v"],
+    },
   ],
   "vim.visualModeKeyBindingsNonRecursive": [
     // Move lines
     {
       "before": ["J"],
-      "commands": ["editor.action.moveLinesDownAction"]
+      "commands": ["editor.action.moveLinesDownAction"],
     },
     {
       "before": ["K"],
-      "commands": ["editor.action.moveLinesUpAction"]
+      "commands": ["editor.action.moveLinesUpAction"],
     },
     // Stay in visual mode after indent
     {
       "before": [">"],
       "commands": ["editor.action.indentLines"],
-      "after": ["g", "v"]
+      "after": ["g", "v"],
     },
     {
       "before": ["<"],
       "commands": ["editor.action.outdentLines"],
-      "after": ["g", "v"]
-    }
+      "after": ["g", "v"],
+    },
   ],
   "vim.statusBarColorControl": false,
   "vim.highlightedyank.enable": true,
@@ -301,13 +301,13 @@
     "**/.pytest_cache": true,
     "**/*.pyc": true,
     "**/.venv": true,
-    "**/venv": true
+    "**/venv": true,
   },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/node_modules/**": true,
-    "**/.venv/**": true
+    "**/.venv/**": true,
   },
 
   // -------------------------------------------------------------------------
@@ -319,7 +319,7 @@
     "**/venv": true,
     "**/__pycache__": true,
     "**/dist": true,
-    "**/build": true
+    "**/build": true,
   },
 
   // -------------------------------------------------------------------------
@@ -332,8 +332,8 @@
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit",
-      "source.fixAll": "explicit"
-    }
+      "source.fixAll": "explicit",
+    },
   },
   "python.analysis.typeCheckingMode": "basic",
   "python.analysis.autoImportCompletions": true,
@@ -343,27 +343,27 @@
   // -------------------------------------------------------------------------
   "[javascript]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescript]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescriptreact]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[javascriptreact]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[json]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[jsonc]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
 
   // -------------------------------------------------------------------------
@@ -372,12 +372,12 @@
   "[clojure]": {
     "editor.tabSize": 2,
     "editor.autoClosingBrackets": "always",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
   },
   "calva.paredit.defaultKeyMap": "original",
   "calva.prettyPrintingOptions": {
     "enabled": true,
-    "width": 80
+    "width": 80,
   },
 
   // -------------------------------------------------------------------------
@@ -385,7 +385,7 @@
   // -------------------------------------------------------------------------
   "[shellscript]": {
     "editor.tabSize": 4,
-    "editor.defaultFormatter": "foxundermoon.shell-format"
+    "editor.defaultFormatter": "foxundermoon.shell-format",
   },
 
   // -------------------------------------------------------------------------
@@ -393,11 +393,11 @@
   // -------------------------------------------------------------------------
   "[html]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[css]": {
     "editor.tabSize": 2,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[markdown]": {
     "editor.wordWrap": "on",
@@ -405,8 +405,8 @@
     "editor.quickSuggestions": {
       "other": false,
       "comments": false,
-      "strings": false
-    }
+      "strings": false,
+    },
   },
 
   // -------------------------------------------------------------------------
@@ -430,5 +430,10 @@
   // Telemetry
   // -------------------------------------------------------------------------
   "telemetry.telemetryLevel": "off",
-  "redhat.telemetry.enabled": false
+  "redhat.telemetry.enabled": false,
+  "docker.extension.enableComposeLanguageServer": false,
+  "claudeCode.preferredLocation": "panel",
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "claudeCode.selectedModel": "opus",
 }
