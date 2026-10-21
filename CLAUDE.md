@@ -51,6 +51,7 @@ tmux plugins require a one-time `prefix + I` (TPM install) after first launch.
 | `.gitconfig` | Git config with rebase-first pull, auto-setup remotes, SSH-over-HTTPS for GitHub. |
 | `.psqlrc` | psql prompt, per-database history, saved queries for common ops (locks, table sizes). |
 | `ghostty/config` | Ghostty terminal config: Solarized Light theme, JetBrains Mono, xterm-256color for remote compat. |
+| `uv/uv.toml` | uv config: `python-preference = "only-managed"` so uv ignores Homebrew/system Pythons. |
 | `install.sh` | Idempotent installer: detects OS, installs deps via Homebrew or apt, creates symlinks, bootstraps plugins. |
 | `cleanup.sh` | Backs up existing dotfiles to a timestamped directory before install. |
 

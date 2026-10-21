@@ -71,6 +71,7 @@ install_symlinks() {
     link "$DOTFILES/.psqlrc" ~/.psqlrc
     link "$DOTFILES/nvim/init.lua" ~/.config/nvim/init.lua
     link "$DOTFILES/ghostty/config" ~/.config/ghostty/config
+    link "$DOTFILES/uv/uv.toml" ~/.config/uv/uv.toml
 
     if [[ ! -f "$HOME/.gitconfig.local" ]]; then
         cp "$DOTFILES/gitconfig.local" "$HOME/.gitconfig.local"
