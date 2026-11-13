@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# Run `git nice` + branch/worktree cleanup across every git repo directly under a root dir,
+# and flag repos whose GitHub remote is archived.
+#
+# Usage: git cleanup-all [-n] [-A] [ROOT]     (ROOT defaults to ~/src)
+#   -n  dry run: show what would be done, change nothing
+#   -A  skip the GitHub archived check
+set -u
+
+dry=false; check_archived=true
+while getopts "nAh" opt; do
+    case $opt in
+        n) dry=true ;;
+        A) check_archived=false ;;
+        h|*) sed -n '2,8p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    esac
+done
+shift $((OPTIND - 1))
+root="${1:-$HOME/src}"
+[[ -d "$root" ]] || { echo "Not a directory: $root" >&2; exit 1; }
+
+failed=(); archived=(); noremote=(); linked=(); dirty=()
+
+for dir in "$root"/*/; do
+    dir=${dir%/}; name=$(basename "$dir")
+    [[ -e "$dir/.git" ]] || continue
+    # A .git *file* means a linked worktree of another repo; the main repo handles it.
+    if [[ -f "$dir/.git" ]]; then linked+=("$name"); continue; fi
+
+    url=$(git -C "$dir" remote get-url origin 2>/dev/null) || { noremote+=("$name"); continue; }
+    branch=$(git -C "$dir" branch --show-current)
+    echo "== $name ($branch)"
+
+    if [[ -n "$(git -C "$dir" status --porcelain --untracked-files=no)" ]]; then
+        dirty+=("$name")
+    fi
+
+    if $check_archived && command -v gh >/dev/null 2>&1; then
+        slug=$(sed -E 's#^(git@[^:]+:|https?://[^/]+/)##; s#\.git$##' <<<"$url")
+        [[ $(gh repo view "$slug" --json isArchived -q .isArchived 2>/dev/null) == true ]] && archived+=("$name ($slug)")
+    fi
+
+    if $dry; then echo "  would run: git nice $branch; git branch-scrub; git worktree prune"; continue; fi
+
+    # Detached HEAD: nothing sensible to pass to `git nice`; just scrub.
+    if [[ -z "$branch" ]]; then
+        echo "  detached HEAD, scrub only"
+        (cd "$dir" && git fetch -p -q; git branch-scrub) || failed+=("$name")
+    elif ! (cd "$dir" && git nice "$branch"); then
+        # e.g. current branch has no upstream: pull fails, so scrub never ran inside git nice
+        echo "  git nice failed; running scrub anyway"
+        (cd "$dir" && git fetch -p -q; git branch-scrub) || true
+        failed+=("$name")
+    fi
+    git -C "$dir" worktree prune
+done
+
+echo
+echo "===== Summary ($root) ====="
+((${#failed[@]}))   && printf 'git nice failed (check manually): %s\n' "${failed[*]}"
+((${#dirty[@]}))    && printf 'Uncommitted tracked changes:      %s\n' "${dirty[*]}"
+((${#noremote[@]})) && printf 'No remote (skipped):              %s\n' "${noremote[*]}"
+((${#linked[@]}))   && printf 'Linked worktrees (skipped):       %s\n' "${linked[*]}"
+if ((${#archived[@]})); then
+    echo "ARCHIVED on GitHub (candidates for removal):"
+    printf '  - %s\n' "${archived[@]}"
+fi
+exit 0
