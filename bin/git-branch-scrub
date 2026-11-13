@@ -1,19 +1,44 @@
 #!/usr/bin/env bash
-# Delete local branches merged into default branch
+# Delete local branches merged into the default branch, including squash/rebase-merged ones.
+# Squash detection: (1) git-only: a synthetic squash commit of the branch is already
+# patch-equivalent in default; (2) gh: the branch's PR is MERGED and its head SHA equals
+# the local tip (so no unpushed work is lost).
 set -e
 
-git remote prune origin
+git remote prune origin 2>/dev/null || true
 
 current=$(git branch --show-current)
 default=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
 [[ -z "$default" ]] && for b in main master; do git show-ref -q "refs/heads/$b" && default=$b && break; done
 [[ -z "$default" ]] && { echo "Cannot determine default branch"; exit 1; }
 
-merged=$(git branch --merged | grep -v -e '\*' -e "^[[:space:]]*$current$" -e "^[[:space:]]*$default$" | sed 's/^[[:space:]]*//' | grep -v '^$' || true)
+# Branches checked out in any worktree can't be deleted.
+in_worktree=$(git worktree list --porcelain | sed -n 's@^branch refs/heads/@@p')
 
-if [[ -n "$merged" ]]; then
-    echo "Deleting: $merged"
-    echo "$merged" | xargs git branch -d
-else
-    echo "No merged branches to delete"
-fi
+is_squash_merged() {
+    local b=$1 base tree synth
+    base=$(git merge-base "$default" "$b") || return 1
+    tree=$(git rev-parse "$b^{tree}")
+    synth=$(git commit-tree "$tree" -p "$base" -m squash)
+    [[ $(git cherry "$default" "$synth" | cut -c1) == "-" ]] && return 0
+    if command -v gh >/dev/null 2>&1; then
+        local out
+        out=$(gh pr list --head "$b" --state merged --json headRefOid -q '.[].headRefOid' 2>/dev/null || true)
+        grep -qx "$(git rev-parse "$b")" <<<"$out" && return 0
+    fi
+    return 1
+}
+
+deleted=0
+while IFS= read -r b; do
+    [[ -z "$b" || "$b" == "$current" || "$b" == "$default" ]] && continue
+    grep -qxF "$b" <<<"$in_worktree" && continue
+    if git merge-base --is-ancestor "$b" "$default"; then
+        echo "Deleting (merged): $b"; git branch -d "$b"; deleted=1
+    elif is_squash_merged "$b"; then
+        echo "Deleting (squash-merged): $b"; git branch -D "$b"; deleted=1
+    fi
+done < <(git for-each-ref --format='%(refname:short)' refs/heads)
+
+[[ $deleted -eq 0 ]] && echo "No merged branches to delete"
+exit 0
