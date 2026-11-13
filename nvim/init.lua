@@ -111,7 +111,7 @@ require("lazy").setup({
                         else fallback() end
                     end, { "i", "s" }),
                 }),
-                sources = cmp.config.sources({ { name = "copilot" }, { name = "nvim_lsp" }, { name = "luasnip" }, { name = "buffer" }, { name = "path" } }),
+                sources = cmp.config.sources({ { name = "nvim_lsp" }, { name = "luasnip" }, { name = "buffer" }, { name = "path" } }),
             })
         end,
     },
@@ -147,36 +147,6 @@ require("lazy").setup({
     { "windwp/nvim-autopairs", event = "InsertEnter", opts = {} },
     { "numToStr/Comment.nvim", opts = {} },
     { "kylechui/nvim-surround", event = "VeryLazy", opts = {} },
-
-    -- AI Code Completion (via nvim-cmp only — inline suggestions disabled)
-    {
-        "zbirenbaum/copilot.lua",
-        cmd = "Copilot",
-        event = "InsertEnter",
-        config = function()
-            require("copilot").setup({
-                suggestion = { enabled = false },
-                panel = { enabled = false },
-                filetypes = {
-                    yaml = false,
-                    markdown = false,
-                    help = false,
-                    gitcommit = false,
-                    gitrebase = false,
-                    ["."] = false,
-                },
-            })
-        end,
-    },
-
-    -- Copilot integration with nvim-cmp
-    {
-        "zbirenbaum/copilot-cmp",
-        dependencies = { "copilot.lua" },
-        config = function()
-            require("copilot_cmp").setup()
-        end,
-    },
 
     -- Clojure REPL
     { "Olical/conjure", ft = { "clojure" } },
