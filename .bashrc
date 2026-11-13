@@ -24,6 +24,10 @@ pathprepend() { [[ -d "$1" && ":$PATH:" != *":$1:"* ]] && PATH="$1:$PATH"; }
 pathprepend "$HOME/.local/bin"
 pathprepend "$HOME/bin"
 [[ "$OS" == "macos" ]] && eval "$($BREW_PREFIX/bin/brew shellenv 2>/dev/null)"
+# uv-managed Pythons and tools win over Homebrew/system ones: `brew shellenv` above puts
+# /usr/local/bin first, which made `python3` the python.org install instead of uv's.
+pathfront() { [[ -d "$1" ]] || return; local rest=":$PATH:"; rest="${rest//:$1:/:}"; rest="${rest#:}"; PATH="$1:${rest%:}"; }
+pathfront "$HOME/.local/bin"
 
 export CDPATH=".:$HOME:$HOME/dev"
 
