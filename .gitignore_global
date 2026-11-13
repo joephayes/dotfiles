@@ -122,3 +122,5 @@ credentials.json
 *.temp
 *.cache
 .cache/
+
+**/.claude/settings.local.json
