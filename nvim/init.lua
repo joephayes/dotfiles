@@ -181,9 +181,6 @@ require("lazy").setup({
     -- Clojure REPL
     { "Olical/conjure", ft = { "clojure" } },
 
-    -- Tmux integration
-    { "christoomey/vim-tmux-navigator", lazy = false },
-
     -- Comprehensive Go support
     {
         "ray-x/go.nvim",
@@ -380,31 +377,65 @@ map("n", "<leader>w", ":w<CR>", { desc = "Save" })
 map("n", "<leader>q", ":q<CR>", { desc = "Quit" })
 map("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "File tree" })
 map("n", "<leader>g", ":Neogit<CR>", { desc = "Neogit" })
--- Claude Code (tmux split — navigate back with C-h)
-map("n", "<leader>cc", function()
-    local cwd = vim.fn.getcwd()
-    local pane = vim.fn.system("tmux list-panes -F '#{pane_id} #{pane_title}' | awk '$2==\"claude\"{print $1; exit}'"):gsub("\n", "")
-    if pane ~= "" then
-        vim.fn.system("tmux select-pane -t " .. pane)
-    else
-        local new = vim.fn.system(string.format(
-            "tmux split-window -h -l 90 -c '%s' -P -F '#{pane_id}' 'bash -li -c claude'", cwd
-        )):gsub("\n", "")
-        vim.fn.system("tmux select-pane -t " .. new .. " -T claude")
+-- Herdr integration (https://herdr.dev). All helpers no-op with a notice outside herdr.
+local in_herdr = vim.env.HERDR_ENV == "1"
+
+local function herdr(args)
+    local res = vim.system(vim.list_extend({ "herdr" }, args), { text = true }):wait()
+    if res.code ~= 0 then return nil, vim.trim(res.stderr ~= "" and res.stderr or res.stdout) end
+    local ok, data = pcall(vim.json.decode, res.stdout)
+    return ok and data.result or {}, nil
+end
+
+-- Navigate nvim windows, falling through to adjacent herdr panes at the edge (replaces vim-tmux-navigator)
+for key, dir in pairs({ h = "left", j = "down", k = "up", l = "right" }) do
+    map("n", "<C-" .. key .. ">", function()
+        local win = vim.fn.winnr()
+        vim.cmd("wincmd " .. key)
+        if vim.fn.winnr() == win and in_herdr then
+            herdr({ "pane", "focus", "--current", "--direction", dir })
+        end
+    end, { desc = "Navigate " .. dir, silent = true })
+end
+
+-- Claude Code in a herdr split. Reuses a Claude pane already in this tab (found via herdr's agent detection).
+local function claude_pane()
+    local res = herdr({ "pane", "list", "--workspace", vim.env.HERDR_WORKSPACE_ID })
+    for _, pane in ipairs(res and res.panes or {}) do
+        if pane.agent == "claude" and pane.tab_id == vim.env.HERDR_TAB_ID then return pane.pane_id end
     end
-end, { desc = "Claude Code" })
-map("n", "<leader>cx", function()
-    local file = vim.fn.expand('%:p')
-    local cwd = vim.fn.getcwd()
-    vim.fn.system(string.format("tmux split-window -h -l 90 -c '%s' 'bash -li -c \"claude \\\"@%s\\\"\"'", cwd, file))
-end, { desc = "Claude with file" })
+end
+
+-- Focus Claude, optionally handing it a prompt/file reference; start it in a new split if absent.
+local function claude(prompt)
+    if not in_herdr then
+        vim.notify("Not running inside herdr", vim.log.levels.WARN)
+        return
+    end
+    local pane = claude_pane()
+    if pane then
+        if prompt then herdr({ "agent", "prompt", pane, prompt }) end
+        herdr({ "agent", "focus", pane })
+        return
+    end
+    local res, err = herdr({ "pane", "split", "--current", "--direction", "right", "--ratio", "0.4", "--cwd", vim.fn.getcwd(), "--focus" })
+    if not res then
+        vim.notify("herdr split failed: " .. err, vim.log.levels.ERROR)
+        return
+    end
+    local cmd = "claude"
+    if prompt then cmd = cmd .. " " .. vim.fn.shellescape(prompt) end
+    herdr({ "pane", "run", res.pane.pane_id, cmd })
+end
+
+map("n", "<leader>cc", function() claude() end, { desc = "Claude Code" })
+map("n", "<leader>cx", function() claude("@" .. vim.fn.expand("%:p")) end, { desc = "Claude with file" })
 map("v", "<leader>cs", function()
     local lines = vim.fn.getline(vim.fn.line("'<"), vim.fn.line("'>"))
-    local ext = vim.fn.expand('%:e')
-    local tmp = vim.fn.tempname() .. (ext ~= '' and '.' .. ext or '.txt')
+    local ext = vim.fn.expand("%:e")
+    local tmp = vim.fn.tempname() .. (ext ~= "" and "." .. ext or ".txt")
     vim.fn.writefile(lines, tmp)
-    local cwd = vim.fn.getcwd()
-    vim.fn.system(string.format("tmux split-window -h -l 90 -c '%s' 'bash -li -c \"claude \\\"@%s\\\"\"'", cwd, tmp))
+    claude("@" .. tmp)
 end, { desc = "Claude with selection" })
 map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Find files" })
 map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Grep" })
