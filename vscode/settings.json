@@ -178,7 +178,7 @@
       "before": ["<leader>", "s"],
       "commands": ["workbench.action.splitEditorDown"],
     },
-    // Navigate splits (like vim-tmux-navigator)
+    // Navigate splits (same keys as nvim/herdr)
     {
       "before": ["<C-h>"],
       "commands": ["workbench.action.focusLeftGroup"],

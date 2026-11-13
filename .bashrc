@@ -92,8 +92,6 @@ alias mv='mv -i'
 # Tools
 alias v=nvim
 alias vim=nvim
-alias tm=tmux
-alias tma='tmux attach -t'
 alias g=git
 alias ga='git add'
 alias gc='git commit'

@@ -18,7 +18,7 @@ cd ~/dotfiles
 | File | Purpose |
 |------|---------|
 | `.bashrc` | Shell config with bash-git-prompt, aliases for git, python, node, postgres |
-| `.tmux.conf` | tmux with vim-style navigation, Solarized theme |
+| `ghostty/config` | Ghostty terminal (Solarized Light, JetBrains Mono) |
 | `nvim/init.lua` | Neovim 0.11+ with native LSP, Telescope, Treesitter, Go debugging |
 | `.gitconfig` | Git defaults — identity loaded from `~/.gitconfig.local` (created on install) |
 | `.psqlrc` | PostgreSQL client settings |
@@ -48,19 +48,17 @@ LSP servers auto-install via mason-lspconfig on first Neovim launch.
 - `gd` definition, `gr` references, `K` hover, `<leader>ca` code action
 - **Go**: `<leader>g*` Go tools, `<leader>t*` testing, `F5/F10/F11/F12` debugging
 
-**tmux** (prefix = C-b):
-- `|` split vertical, `-` split horizontal
-- `C-h/j/k/l` navigate panes (works seamlessly with vim)
-- `prefix + I` install TPM plugins (once after install)
+**herdr** (prefix = C-b; installed by `install.sh`):
+- `C-h/j/k/l` navigate between nvim windows and herdr panes
+- `<leader>cc/cx/cs` open or reuse a Claude Code pane next to nvim
 
 ## Post-install
 
 1. Edit `~/.gitconfig.local` with your name/email (created automatically by `install.sh`)
 2. `source ~/.bashrc`
 3. Open nvim — LSPs install automatically
-4. In tmux: `prefix + I` for TPM plugins
-5. VS Code (optional): `./vscode-setup.sh`
-6. For Go: Install Go first, then re-run `./install.sh` to get Go development tools
+4. VS Code (optional): `./vscode-setup.sh`
+5. For Go: Install Go first, then re-run `./install.sh` to get Go development tools
 
 ## Local overrides
 

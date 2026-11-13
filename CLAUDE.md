@@ -21,12 +21,10 @@ A cross-platform dotfiles repository for macOS (Intel/Apple Silicon) and Linux. 
 ./install.sh            # Full install: deps + symlinks + plugin bootstrap
 ./install.sh --skip-deps  # Symlinks and plugin setup only
 ./cleanup.sh            # Backup existing configs before a fresh install
-./cleanup.sh -c         # Also clear nvim/tmux plugin caches
+./cleanup.sh -c         # Also clear nvim plugin caches
 ```
 
 LSP servers are auto-installed by mason-lspconfig on first launch (`pyright`, `ruff`, `ts_ls`, `clojure_lsp`, `bashls`, `sqls`, `lua_ls`, `gopls`).
-
-tmux plugins require a one-time `prefix + I` (TPM install) after first launch.
 
 ### Post-install steps
 
@@ -34,8 +32,7 @@ tmux plugins require a one-time `prefix + I` (TPM install) after first launch.
 2. Edit `~/.gitconfig` name/email
 3. `source ~/.bashrc`
 4. Open nvim — LSPs install automatically via mason-lspconfig on first launch
-5. tmux: `prefix + I` for TPM plugins
-6. For Go: Install Go first, then re-run `./install.sh` to get Go development tools automatically
+5. For Go: Install Go first, then re-run `./install.sh` to get Go development tools automatically
 
 ## Repository structure
 
@@ -43,7 +40,6 @@ tmux plugins require a one-time `prefix + I` (TPM install) after first launch.
 |------|------|
 | `.bashrc` | Main shell config. Sources `.bashrc.local` at the end for per-machine overrides. |
 | `.bash_profile` | Login shell entry — inits Homebrew, sources `.bashrc`. |
-| `.tmux.conf` | tmux config with vim-style nav and vim-tmux-navigator integration. |
 | `nvim/init.lua` | Single-file Neovim config. Lazy.nvim plugin manager, native 0.11+ LSP, gitsigns + neogit for git, comprehensive Go support with debugging. |
 | `vscode/` | Settings and keybindings (symlinked by `vscode-setup.sh`). Extensions list in `extensions.txt`. |
 | `bin/git-nice` | Checkout default branch, pull, then run `git-branch-scrub`. Invoked as `git nice`. |
@@ -67,7 +63,7 @@ tmux plugins require a one-time `prefix + I` (TPM install) after first launch.
 Single file, top-to-bottom:
 1. Options block
 2. Lazy.nvim bootstrap
-3. Plugin table (colorscheme first with `priority = 1000`, then status line, file tree, telescope, treesitter, mason, completion, git, editing helpers, conjure, tmux nav, toggleterm, go.nvim, neotest, nvim-dap)
+3. Plugin table (colorscheme first with `priority = 1000`, then status line, file tree, telescope, treesitter, mason, completion, git, editing helpers, conjure, toggleterm, go.nvim, neotest, nvim-dap)
 4. LSP setup using `vim.lsp.config` (native 0.11+ API) — pyright, ts_ls, clojure_lsp, bashls, sqls, lua_ls, gopls
 5. Global keymaps
 6. Filetype autocmds (2-space for JS/TS/JSON/YAML/HTML/CSS/Clojure; 4-space for bash; tabs for Go)
@@ -80,10 +76,10 @@ Leader is `<Space>`, local leader is `,` (used by Conjure for Clojure).
 
 | Key | Action |
 |-----|--------|
-| `<leader>cc` | Claude Code (tmux split, `C-h` to return to nvim) |
+| `<leader>cc` | Claude Code (herdr split; reuses an existing Claude pane in the tab) |
 | `<leader>cx` | Claude with current file (`@file` reference) |
 | `<leader>cs` | Claude with visual selection (writes to tempfile) |
-| `Ctrl+B Ctrl+C` | Claude Code from anywhere in tmux |
+| `Ctrl+h/j/k/l` | Move between nvim windows and herdr panes |
 | `<leader>lf` | Format buffer |
 | `<leader>ff/fg/fb` | Telescope find files/grep/buffers |
 | `gd/gr/K` | Definition/references/hover |
@@ -118,4 +114,4 @@ Every managed file is a symlink back into this repo. If you add a new config fil
 - `uv` preferred over `pip`/`venv` for Python
 - `nvm` for Node version management
 - Neovim 0.11+ required (uses native `vim.lsp.config` API)
-- TPM for tmux plugins (`prefix + I` to install)
+- herdr (installed by `install.sh`) replaces tmux for terminal multiplexing; nvim's Claude keymaps drive it via the `herdr` CLI

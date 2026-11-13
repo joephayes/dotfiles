@@ -14,7 +14,7 @@ Usage: $(basename "$0") [OPTIONS]
 
 Options:
     -y, --yes             Skip confirmation
-    -c, --include-caches  Also remove Neovim/tmux plugin caches
+    -c, --include-caches  Also remove Neovim plugin caches
     -h, --help            Show this help
 EOF
     exit 0
@@ -61,7 +61,6 @@ backup ~/.bashrc
 backup ~/.bash_profile
 backup ~/.profile
 backup ~/.bashrc.local
-backup ~/.tmux.conf
 backup ~/.gitconfig
 backup ~/.gitignore_global
 backup ~/.psqlrc
@@ -83,7 +82,6 @@ backup ~/bin/git-nice
 
 # Optional: clear plugin caches
 if [[ "$INCLUDE_CACHES" == true ]]; then
-    remove ~/.tmux/plugins
     remove ~/.local/share/nvim
     remove ~/.local/state/nvim
     remove ~/.cache/nvim

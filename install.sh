@@ -29,7 +29,7 @@ install_deps() {
 
     if [[ "$OS" == "macos" ]]; then
         has brew || { /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"; }
-        for pkg in neovim tmux fzf ripgrep fd shellcheck shfmt bash-git-prompt; do
+        for pkg in neovim fzf ripgrep fd shellcheck shfmt bash-git-prompt; do
             brew list "$pkg" &>/dev/null || brew install "$pkg"
         done
         for cask in ghostty font-jetbrains-mono; do
@@ -38,7 +38,7 @@ install_deps() {
     elif [[ "$OS" == "linux" ]] && has apt-get; then
         sudo apt-get update -qq
         grep -q "neovim-ppa" /etc/apt/sources.list.d/* 2>/dev/null || { sudo add-apt-repository -y ppa:neovim-ppa/unstable; sudo apt-get update -qq; }
-        for pkg in neovim tmux fzf ripgrep fd-find xclip shellcheck shfmt fonts-jetbrains-mono; do
+        for pkg in neovim fzf ripgrep fd-find xclip shellcheck shfmt fonts-jetbrains-mono; do
             dpkg -s "$pkg" &>/dev/null || sudo apt-get install -y "$pkg"
         done
         if has flatpak; then
@@ -57,6 +57,8 @@ install_deps() {
         git clone --depth 1 https://github.com/magicmonty/bash-git-prompt.git "$HOME/.bash-git-prompt"
     fi
 
+    has herdr || { log "Installing herdr..."; curl -fsSL https://herdr.dev/install.sh | sh; }
+
     has claude || { log "Installing Claude Code..."; curl -fsSL https://claude.ai/install.sh | bash; }
 }
 
@@ -65,7 +67,6 @@ install_symlinks() {
     link "$DOTFILES/.bashrc" ~/.bashrc
     link "$DOTFILES/.bash_profile" ~/.bash_profile
     link "$DOTFILES/.profile" ~/.profile
-    link "$DOTFILES/.tmux.conf" ~/.tmux.conf
     link "$DOTFILES/.gitconfig" ~/.gitconfig
     link "$DOTFILES/.gitignore_global" ~/.gitignore_global
     link "$DOTFILES/.psqlrc" ~/.psqlrc
@@ -88,7 +89,6 @@ install_symlinks() {
 setup() {
     mkdir -p ~/.local/share/nvim/undo
     has nvim && { log "Installing nvim plugins..."; nvim --headless "+Lazy! sync" +qa 2>/dev/null || true; }
-    [[ -d ~/.tmux/plugins/tpm ]] || git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
     # Install Go development tools if Go is available
     if has go; then
